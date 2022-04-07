@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         fontFamily: 'BebasNeue',
       ),
+      debugShowCheckedModeBanner: false,
       home: MyHomePage(),
     );
   }

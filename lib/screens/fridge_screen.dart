@@ -16,6 +16,7 @@ class _FridgeScreenState extends State<FridgeScreen> {
       title: 'FRIDGE',
       primaryColor: AppColors.lightGreen,
       secondaryColor: AppColors.green,
+      child: Container(),
     );
   }
 }
