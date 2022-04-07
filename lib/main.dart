@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:fridchen_app/screens/home_screen.dart';
 
-void main() {
+Future main() async{
+  await dotenv.load(fileName: ".env");
   runApp(MyApp());
 }
 
@@ -11,21 +14,9 @@ class MyApp extends StatelessWidget {
       title: 'Fridchen',
       theme: ThemeData(
         primarySwatch: Colors.green,
+        fontFamily: 'BebasNeue',
       ),
       home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Fridchen"),
-      ),
     );
   }
 }

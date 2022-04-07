@@ -1,16 +1,15 @@
-# fridchen_app
+# THE FRIDCHEN APP
 
-A new Flutter project.
+A Mobile Application that will help you to manage groceries, shopping list and food recipes.
 
-## Getting Started
+# Family Concept
 
-This project is a starting point for a Flutter application.
+Can share groceries, shopping list and food recipes with your family or your friends.
 
-A few resources to get you started if this is your first Flutter project:
+# IOS and Android
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+The Fridchen App is using Flutter developed a cross platform application.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Project information
+
+This project is part of the 1076008 Software Development Processes Course 2/2564, Second- year, Computer Engineering, KMITL.
