@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fridchen_app/screens/home_screen.dart';
 
-Future main() async{
+Future main() async {
   await dotenv.load(fileName: ".env");
   runApp(MyApp());
 }
