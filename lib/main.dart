@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Fridchen',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.blue,
         fontFamily: 'BebasNeue',
       ),
       debugShowCheckedModeBanner: false,
