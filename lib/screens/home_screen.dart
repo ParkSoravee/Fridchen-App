@@ -11,7 +11,12 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: HomeDrawer(),
+      // drawer: HomeDrawer(),
+      drawer: Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: AppColors.green,
+          ),
+          child: homedrawer()),
       backgroundColor: AppColors.lightGreen,
       body: Container(
         margin: EdgeInsets.only(
