@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fridchen_app/screens/fridge_screen.dart';
 import 'package:fridchen_app/themes/color.dart';
 
+import '../widgets/home_drawer.dart';
 import '../widgets/home_menus.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -10,6 +11,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: HomeDrawer(),
       backgroundColor: AppColors.lightGreen,
       body: Container(
         margin: EdgeInsets.only(
@@ -52,6 +54,79 @@ class FamilySelect extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
+      child: Column(
+        children: [
+          Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                alignment: Alignment.topLeft,
+                child: IconButton(
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  icon: Icon(Icons.menu, size: 40),
+                  color: AppColors.darkGreen,
+                ),
+              ),
+              Center(
+                child: Text('FRIDCHEN',
+                    style: TextStyle(
+                      fontSize: 70,
+                      color: AppColors.darkGreen,
+                    )),
+              ),
+            ],
+          ),
+          // Spacer(),
+          Container(
+            padding: const EdgeInsets.only(top: 10),
+            child: Row(
+              children: <Widget>[
+                SizedBox(width: 40),
+                IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new_sharp),
+                  iconSize: 40,
+                  color: AppColors.darkGreen,
+                  onPressed: () {},
+                ),
+                SizedBox(width: 30),
+                Text(
+                  'HOME',
+                  style: TextStyle(
+                    fontSize: 60,
+                    color: Color.fromARGB(251, 35, 61, 77),
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.qr_code_scanner_rounded),
+                  iconSize: 40,
+                  color: AppColors.darkGreen,
+                  onPressed: () {
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => QRScreen(),
+                    //     ));
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  iconSize: 50,
+                  color: AppColors.darkGreen,
+                  onPressed: () {
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (BuildContext context) =>
+                    //       _buildPopupDialog(context),
+                    // );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -126,6 +201,112 @@ class Recommend extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(topRight: Radius.circular(80)),
         color: AppColors.green,
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.only(top: 20, left: 20),
+            width: double.infinity,
+            child: Text(
+              'RECOMMEND',
+              style: TextStyle(
+                fontSize: 50,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.all(0),
+              children: [
+                ListTile(
+                  leading: Icon(
+                    Icons.push_pin,
+                    size: 40,
+                    color: AppColors.darkGreen,
+                  ),
+                  title: const Text(
+                    'CHOCOLATE LAVA CAKE',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.push_pin,
+                    size: 40,
+                    color: AppColors.yellow,
+                  ),
+                  title: const Text(
+                    'CHOCOLATE LAVA CAKE',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.push_pin,
+                    size: 40,
+                    color: AppColors.darkGreen,
+                  ),
+                  title: const Text(
+                    'CHOCOLATE LAVA CAKE',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.push_pin,
+                    size: 40,
+                    color: AppColors.yellow,
+                  ),
+                  title: const Text(
+                    'CHOCOLATE LAVA CAKE',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.push_pin,
+                    size: 40,
+                    color: AppColors.darkGreen,
+                  ),
+                  title: const Text(
+                    'CHOCOLATE LAVA CAKE',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.push_pin,
+                    size: 40,
+                    color: AppColors.yellow,
+                  ),
+                  title: const Text(
+                    'CHOCOLATE LAVA CAKE',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
