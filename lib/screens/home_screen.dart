@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fridchen_app/screens/fridge_screen.dart';
 import 'package:fridchen_app/themes/color.dart';
 
+import '../widgets/home_drawer.dart';
 import '../widgets/home_menus.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -10,6 +11,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: HomeDrawer(),
       backgroundColor: AppColors.lightGreen,
       body: Container(
         margin: EdgeInsets.only(
@@ -52,6 +54,21 @@ class FamilySelect extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.transparent,
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            alignment: Alignment.topLeft,
+            child: IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: Icon(Icons.menu),
+            ),
+          ),
+          Text('FRIDCHEN'),
+        ],
+      ),
     );
   }
 }
