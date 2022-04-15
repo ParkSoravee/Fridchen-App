@@ -5,6 +5,8 @@ import 'package:fridchen_app/providers/fridges.dart';
 import 'package:fridchen_app/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'providers/tags.dart';
+
 Future main() async {
   await dotenv.load(fileName: ".env");
   runApp(MyApp());
@@ -20,6 +22,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => FridgeItems(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Tags(),
         ),
       ],
       child: MaterialApp(

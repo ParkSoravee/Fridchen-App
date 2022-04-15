@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fridchen_app/models/tag.dart';
+import 'package:fridchen_app/providers/tags.dart';
 import 'package:fridchen_app/themes/color.dart';
 
 class FridgeItem {
@@ -31,8 +31,8 @@ class FridgeItems with ChangeNotifier {
       unit: 'Litre',
       exp: DateTime(2022, 2, 11),
       tags: [
-        Tag('1', 'Fresh', AppColors.green.toString()),
-        Tag('2', 'Dairy', AppColors.yellow.toString()),
+        Tag('1', 'Fresh', AppColors.green.hashCode),
+        Tag('2', 'Dairy', AppColors.yellow.hashCode),
       ],
     ),
     FridgeItem(
@@ -42,8 +42,8 @@ class FridgeItems with ChangeNotifier {
       unit: 'Grams',
       exp: DateTime(2022, 2, 13),
       tags: [
-        Tag('1', 'Fresh', AppColors.green.toString()),
-        Tag('2', 'Meat', AppColors.orange.toString()),
+        Tag('1', 'Fresh', AppColors.green.hashCode),
+        Tag('2', 'Meat', AppColors.orange.hashCode),
       ],
     ),
   ];
