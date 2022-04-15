@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/screens/fridge_screen.dart';
 import 'package:fridchen_app/themes/color.dart';
+import 'package:fridchen_app/widgets/dialog_confirm.dart';
 
 import '../widgets/home_drawer.dart';
 import '../widgets/home_menus.dart';
@@ -100,7 +101,7 @@ class FamilySelect extends StatelessWidget {
                   'HOME',
                   style: TextStyle(
                     fontSize: 60,
-                    color: Color.fromARGB(251, 35, 61, 77),
+                    color: AppColors.darkGreen,
                   ),
                 ),
                 IconButton(
@@ -120,11 +121,30 @@ class FamilySelect extends StatelessWidget {
                   iconSize: 50,
                   color: AppColors.darkGreen,
                   onPressed: () {
-                    // showDialog(
-                    //   context: context,
-                    //   builder: (BuildContext context) =>
-                    //       _buildPopupDialog(context),
-                    // );
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => Popup_confirm(
+                        texttitle: 'NEW FRIDCHEN',
+                        primaryColor: AppColors.darkGreen,
+                        secondaryColor: AppColors.yellow,
+                        titletextColor: Colors.white,
+                        child: RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: "NAME :",
+                              style: TextStyle(
+                                  fontSize: 50,
+                                  color: Colors.white,
+                                  fontFamily: "BebasNeue")),
+                          TextSpan(
+                              text: " FAVORITE            ",
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  color: Color.fromARGB(255, 252, 202, 70),
+                                  fontFamily: "BebasNeue")),
+                        ])),
+                      ),
+                    );
                   },
                 ),
               ],
