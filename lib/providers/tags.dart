@@ -12,13 +12,7 @@ class Tag {
 class Tags with ChangeNotifier {
   List<Tag> _defaultTags = [
     Tag('1', 'Dairy', AppColors.yellow.hashCode),
-    Tag('2', 'Vegetable', AppColors.green.hashCode),
-    Tag('3', 'Meat', AppColors.orange.hashCode),
-    Tag('3', 'Meat', AppColors.orange.hashCode),
-    Tag('3', 'Meat', AppColors.orange.hashCode),
-    Tag('3', 'Meat', AppColors.orange.hashCode),
-    Tag('3', 'Meat', AppColors.orange.hashCode),
-    Tag('3', 'Meat', AppColors.orange.hashCode),
+    Tag('2', 'Vegetable', AppColors.lightGreen.hashCode),
     Tag('3', 'Meat', AppColors.orange.hashCode),
   ];
 

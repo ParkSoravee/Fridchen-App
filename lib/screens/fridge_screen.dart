@@ -15,6 +15,29 @@ class FridgeScreen extends StatefulWidget {
 }
 
 class _FridgeScreenState extends State<FridgeScreen> {
+  String searchStr = '';
+  List<String> searchTags = [];
+  bool isSearch = false;
+
+  void setTags(List<String> tags) {
+    searchTags = tags;
+    setSearch();
+  }
+
+  void setStr(String str) {
+    searchStr = str;
+    setSearch();
+  }
+
+  void setSearch() {
+    if (searchStr.length > 0 || searchTags.length > 0) {
+      isSearch = true;
+    } else {
+      isSearch = false;
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final defaultTags = Provider.of<Tags>(context, listen: false).defaultTags;
@@ -30,7 +53,18 @@ class _FridgeScreenState extends State<FridgeScreen> {
               tags: defaultTags,
               color: AppColors.green,
               bgColor: AppColors.lightGreen,
+              setSearchStr: setStr,
+              setTags: setTags,
             ),
+            isSearch
+                ? Text(
+                    'searching... ' + searchStr + searchTags.toString(),
+                    style: TextStyle(color: Colors.amber, fontSize: 30),
+                  )
+                : Text(
+                    'not search',
+                    style: TextStyle(color: Colors.amber, fontSize: 30),
+                  ),
           ],
         ),
       ),

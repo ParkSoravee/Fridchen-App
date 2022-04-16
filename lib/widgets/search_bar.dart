@@ -8,11 +8,15 @@ class SearchBar extends StatefulWidget {
   final Color color;
   final Color bgColor;
   final List<Tag> tags;
+  final Function setSearchStr;
+  final Function setTags;
 
   const SearchBar({
     required this.color,
     required this.bgColor,
     this.tags = const [],
+    required this.setSearchStr,
+    required this.setTags,
   });
 
   @override
@@ -20,6 +24,20 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
+  String searchStr = '';
+  List<String> selectedTagIds = [];
+
+  void selectTag(tagId) {
+    final result = selectedTagIds.firstWhere((element) => element == tagId,
+        orElse: () => '');
+    if (result == '') {
+      selectedTagIds.add(tagId);
+    } else {
+      selectedTagIds.remove(tagId);
+    }
+    widget.setTags(selectedTagIds);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -39,9 +57,9 @@ class _SearchBarState extends State<SearchBar> {
                 Expanded(
                   child: TextField(
                     onChanged: (str) {
-                      print(str.trim());
-                      // print();
-                      // TODO: function set str
+                      // print(str.trim());
+                      searchStr = str.trim();
+                      widget.setSearchStr(searchStr);
                     },
                     decoration: InputDecoration(
                       hintText: 'Search',
@@ -69,14 +87,14 @@ class _SearchBarState extends State<SearchBar> {
             height: 10,
           ),
           Container(
-            height: 30, // TODO: check to get rid after tags have sized!
+            height: 28,
             width: double.infinity,
             child: ListView.builder(
               clipBehavior: Clip.antiAlias,
               scrollDirection: Axis.horizontal,
               itemCount: widget.tags.length,
               itemBuilder: (ctx, i) {
-                return TagItem(widget.tags[i]);
+                return TagItem(widget.tags[i], selectTag);
               },
             ),
           ),
