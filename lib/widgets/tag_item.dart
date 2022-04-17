@@ -5,9 +5,12 @@ import '../providers/tags.dart';
 
 class TagItem extends StatefulWidget {
   final Tag tag;
-  final Function selectTag; // TODO !!
+  final Function? selectTag;
 
-  TagItem(this.tag, this.selectTag);
+  TagItem({
+    required this.tag,
+    this.selectTag,
+  });
 
   @override
   State<TagItem> createState() => _TagItemState();
@@ -15,20 +18,27 @@ class TagItem extends StatefulWidget {
 
 class _TagItemState extends State<TagItem> {
   bool isHighlight = false;
+  @override
+  void initState() {
+    isHighlight = widget.selectTag != null ? false : true;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          isHighlight = !isHighlight;
-          widget.selectTag(widget.tag.id);
-        });
+        if (widget.selectTag != null) {
+          setState(() {
+            isHighlight = !isHighlight;
+            widget.selectTag!(widget.tag.id);
+          });
+        }
       },
       child: AnimatedContainer(
         duration: Duration(milliseconds: 200),
         curve: Curves.easeIn,
-        margin: EdgeInsets.symmetric(horizontal: 4),
+        margin: EdgeInsets.only(right: 8),
         decoration: BoxDecoration(
           color:
               isHighlight ? Color(widget.tag.colorCode) : AppColors.darkGreen,
@@ -42,8 +52,8 @@ class _TagItemState extends State<TagItem> {
               horizontal: 4,
             ),
             labelStyle: TextStyle(
-              fontSize: 20,
-              height: 0.5,
+              fontSize: 18,
+              height: 0.2,
               color: isHighlight
                   ? AppColors.darkGreen
                   : Color(widget.tag.colorCode),

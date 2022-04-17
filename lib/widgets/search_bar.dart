@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/tags.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/widgets/tag_item.dart';
+import 'package:fridchen_app/widgets/tag_list.dart';
 
 class SearchBar extends StatefulWidget {
   final Color color;
@@ -41,7 +42,7 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 20),
+      padding: const EdgeInsets.only(right: 40, left: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -86,18 +87,7 @@ class _SearchBarState extends State<SearchBar> {
           SizedBox(
             height: 10,
           ),
-          Container(
-            height: 28,
-            width: double.infinity,
-            child: ListView.builder(
-              clipBehavior: Clip.antiAlias,
-              scrollDirection: Axis.horizontal,
-              itemCount: widget.tags.length,
-              itemBuilder: (ctx, i) {
-                return TagItem(widget.tags[i], selectTag);
-              },
-            ),
-          ),
+          TagList(tags: widget.tags, selectTag: selectTag)
         ],
       ),
     );
