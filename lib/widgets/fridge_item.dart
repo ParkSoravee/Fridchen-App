@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fridchen_app/utils/date.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -11,20 +12,29 @@ import 'package:provider/provider.dart';
 class FridgeListItem extends StatefulWidget {
   final FridgeItem item;
 
-  const FridgeListItem(this.item);
+  const FridgeListItem({Key? key, required this.item}) : super(key: key);
 
   @override
   State<FridgeListItem> createState() => _FridgeListItemState();
 }
 
 class _FridgeListItemState extends State<FridgeListItem> {
+  Future<void> setExpDate() async {
+    final date =
+        await MyDateUtils.setExpDate(context: context, title: widget.item.name);
+    if (date != null) {
+      Provider.of<FridgeItems>(context, listen: false)
+          .setExp(widget.item.id, date);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 18),
       decoration: BoxDecoration(
         color: AppColors.red,
-      ),
+      ), //TODO dismissible
       // child: Dismissible(
       //   key: ValueKey(widget.item.id),
       //   background: Container(
@@ -68,7 +78,7 @@ class _FridgeListItemState extends State<FridgeListItem> {
                         Text(
                           widget.item.name,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: AppColors.white,
                             fontSize: 26,
                           ),
                         ),
@@ -87,15 +97,32 @@ class _FridgeListItemState extends State<FridgeListItem> {
                       ],
                     ),
                   ),
-                  Text(
-                    widget.item.exp == null
-                        ? 'EXP'
-                        : 'EXP ${DateFormat('dd MMM yyyy').format(widget.item.exp!)}',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
-                  )
+                  widget.item.exp == null
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () async {
+                                await setExpDate();
+                              },
+                              // radius: 50,
+                              borderRadius: BorderRadius.circular(5),
+                              child: Icon(
+                                CupertinoIcons.calendar_badge_plus,
+                                color: AppColors.white,
+                                size: 30,
+                              ),
+                            ),
+                          ),
+                        )
+                      : Text(
+                          'EXP ${DateFormat('dd MMM yyyy').format(widget.item.exp!)}',
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 24,
+                          ),
+                        )
                 ],
               ),
               Divider(
@@ -112,9 +139,9 @@ class _FridgeListItemState extends State<FridgeListItem> {
                     width: 8,
                   ),
                   Text(
-                    '${widget.item.countLeft} ${widget.item.unit}',
+                    '${(widget.item.countLeft % 1 == 0) ? widget.item.countLeft.toStringAsFixed(0) : widget.item.countLeft} ${widget.item.unit}',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontSize: 24,
                     ),
                   )
