@@ -40,7 +40,8 @@ class TemplateScreen extends StatelessWidget {
               children: [
                 Container(
                   width: double.infinity,
-                  height: MediaQuery.of(context).size.height / 6.2,
+                  height: 136,
+                  // height: MediaQuery.of(context).size.height / 6.2,
                   padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
