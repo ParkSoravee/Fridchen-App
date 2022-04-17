@@ -32,8 +32,8 @@ class FridgeItems with ChangeNotifier {
       isStar: true,
       exp: DateTime(2022, 2, 11),
       tags: [
-        Tag('1', 'Fresh', AppColors.green.hashCode),
-        Tag('2', 'Dairy', AppColors.yellow.hashCode),
+        Tag('4', 'Fresh', AppColors.green.hashCode),
+        Tag('1', 'Dairy', AppColors.yellow.hashCode),
       ],
     ),
     FridgeItem(
@@ -43,27 +43,70 @@ class FridgeItems with ChangeNotifier {
       unit: 'Grams',
       exp: DateTime(2022, 2, 13),
       tags: [
-        Tag('1', 'Fresh', AppColors.green.hashCode),
-        Tag('2', 'Meat', AppColors.orange.hashCode),
-        Tag('3', 'Vagetable', AppColors.lightGreen.hashCode),
-        Tag('3', 'Vagetable', AppColors.lightGreen.hashCode),
+        Tag('3', 'Meat', AppColors.orange.hashCode),
+        Tag('2', 'Vagetable', AppColors.lightGreen.hashCode),
+        Tag('4', 'Fresh', AppColors.green.hashCode),
+      ],
+    ),
+    FridgeItem(
+      id: '34567',
+      name: 'Bok Choy',
+      countLeft: 100,
+      unit: 'Grams',
+      exp: DateTime(2022, 2, 8),
+      tags: [
+        Tag('2', 'Vagetable', AppColors.lightGreen.hashCode),
+        Tag('4', 'Fresh', AppColors.green.hashCode),
+      ],
+    ),
+    FridgeItem(
+      id: '45678',
+      name: 'Kochujang',
+      countLeft: 1,
+      unit: 'Piece',
+      tags: [
+        Tag('5', 'Seasoning', AppColors.yellow.hashCode),
       ],
     ),
   ];
 
   List<FridgeItem> get items {
-    // TODO: sort by EXP date (and pick isStar to first)
-    return [..._items];
+    // sort by EXP date (and pick isStar to first)
+    final items = [..._items];
+    final stars = items.where((element) => element.isStar).toList();
+    items.removeWhere((element) => element.isStar);
+
+    final noExps = items.where((element) => element.exp == null).toList();
+    items.removeWhere((element) => element.exp == null);
+
+    items.sort((a, b) => a.exp!.compareTo(b.exp!));
+
+    return stars + noExps + items;
   }
 
-  List<FridgeItem> search(String? str, List<String> tags) {
+  List<FridgeItem> search(String str, List<String> tags) {
     List<FridgeItem> searchItems = [..._items];
     if (tags.length > 0) {
-      searchItems = searchItems.where((element) => element.tags.contains(tags))
-          as List<FridgeItem>;
+      for (int i = 0; i < tags.length; i++) {
+        searchItems = searchItems
+            .where(
+              (item) => item.tags.any(
+                // (tag) => tags.contains(tag.id),
+                (tag) => tags[i] == tag.id,
+              ),
+            )
+            .toList();
+      }
     }
 
-    return searchItems;
+    if (str != '') {
+      searchItems = searchItems
+          .where((element) =>
+              element.name.toLowerCase().contains(str.toLowerCase()))
+          .toList();
+    }
+
+    return [...searchItems];
   }
 
   void setStar(String id) {
@@ -76,5 +119,22 @@ class FridgeItems with ChangeNotifier {
     // TODO socket
   }
 
-  void delete(String id) {}
+  void setExp(String id, DateTime date) {
+    final selectItem = _items.firstWhere((element) => element.id == id);
+    selectItem.exp = date;
+    notifyListeners();
+    // TODO save to DB
+    // TODO socket
+  }
+
+  void deleteItem(String id) {
+    // TODO save to DB
+    // TODO socket
+  }
+
+  void addItem() {
+    // * how to gen id??
+    // TODO save to DB
+    // TODO socket
+  }
 }

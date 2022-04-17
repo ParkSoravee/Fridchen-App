@@ -42,7 +42,7 @@ class _FridgeScreenState extends State<FridgeScreen> {
   @override
   Widget build(BuildContext context) {
     final fridgeLists = isSearch
-        ? Provider.of<FridgeItems>(context).items
+        ? Provider.of<FridgeItems>(context).search(searchStr, searchTags)
         : Provider.of<FridgeItems>(context).items;
 
     final defaultTags = Provider.of<Tags>(context, listen: false).defaultTags;
@@ -77,7 +77,10 @@ class _FridgeScreenState extends State<FridgeScreen> {
                   bottom: MediaQuery.of(context).padding.bottom,
                 ),
                 child: ListView.builder(
-                  itemBuilder: (ctx, i) => FridgeListItem(fridgeLists[i]),
+                  itemBuilder: (ctx, i) => FridgeListItem(
+                    key: ValueKey(fridgeLists[i].id),
+                    item: fridgeLists[i],
+                  ),
                   itemCount: fridgeLists.length,
                   padding: EdgeInsets.zero,
                   // physics: ScrollPhysics(),
