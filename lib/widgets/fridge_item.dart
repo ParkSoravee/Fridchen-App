@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import 'package:fridchen_app/providers/fridges.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/widgets/tag_list.dart';
+import 'package:provider/provider.dart';
 
 class FridgeListItem extends StatefulWidget {
   final FridgeItem item;
@@ -22,21 +25,34 @@ class _FridgeListItemState extends State<FridgeListItem> {
       decoration: BoxDecoration(
         color: AppColors.red,
       ),
-      child: Dismissible(
-        key: ValueKey(widget.item.id),
-        background: Container(
-          decoration: BoxDecoration(
-            color: AppColors.red,
-          ),
-          child: Icon(Icons.abc),
+      // child: Dismissible(
+      //   key: ValueKey(widget.item.id),
+      //   background: Container(
+      //     decoration: BoxDecoration(
+      //       color: AppColors.red,
+      //     ),
+      //     child: Icon(Icons.abc),
+      //   ),
+      //   secondaryBackground: Container(
+      //     decoration: BoxDecoration(
+      //       color: AppColors.green,
+      //     ),
+      //     child: Icon(Icons.abc),
+      //   ),
+      //   direction: DismissDirection.endToStart,
+      child: Slidable(
+        // key: ValueKey(widget.item.id),
+        endActionPane: ActionPane(
+          motion: const ScrollMotion(),
+          // dismissible: DismissiblePane(
+          //   onDismissed: () {}, // TODO
+          // ),
+          extentRatio: 0.4,
+          // extentRatio: 0.5,
+          children: [
+            DismissBackground(widget.item),
+          ],
         ),
-        secondaryBackground: Container(
-          decoration: BoxDecoration(
-            color: AppColors.green,
-          ),
-          child: Icon(Icons.abc),
-        ),
-        direction: DismissDirection.endToStart,
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
           decoration: BoxDecoration(
@@ -47,12 +63,28 @@ class _FridgeListItemState extends State<FridgeListItem> {
               Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      widget.item.name,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 26,
-                      ),
+                    child: Row(
+                      children: [
+                        Text(
+                          widget.item.name,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 26,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        if (widget.item.isStar)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 3),
+                            child: Icon(
+                              Icons.star_rounded,
+                              color: AppColors.yellow,
+                              size: 26,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                   Text(
@@ -92,6 +124,102 @@ class _FridgeListItemState extends State<FridgeListItem> {
           ),
         ),
       ),
+      // ),
     );
+  }
+}
+
+class DismissBackground extends StatelessWidget {
+  final FridgeItem item;
+  const DismissBackground(this.item);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                // print('star');
+                Provider.of<FridgeItems>(context, listen: false)
+                    .setStar(item.id);
+                Slidable.of(context)!.close();
+              },
+              child: Container(
+                color: AppColors.yellow,
+                height: double.infinity,
+                width: double.infinity,
+                child: Icon(
+                  Icons.star_rounded,
+                  color: AppColors.darkGreen,
+                  size: 28,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+              child: Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    // TODO
+                    print('add');
+                    Slidable.of(context)!.close();
+                  },
+                  child: Container(
+                    color: AppColors.lightGreen,
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: Icon(
+                      CupertinoIcons.cart_fill_badge_plus,
+                      color: AppColors.darkGreen,
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    // TODO
+                    print('del');
+                    Slidable.of(context)!.close();
+                  },
+                  child: Container(
+                    color: AppColors.red,
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: Icon(
+                      CupertinoIcons.delete_solid,
+                      color: AppColors.darkGreen,
+                      size: 24,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ))
+        ],
+      ),
+    );
+    // return SlidableAction(
+    //   onPressed: (ctx) {},
+    //   backgroundColor: AppColors.yellow,
+    //   foregroundColor: AppColors.darkGreen,
+    //   icon: Icons.star_rounded,
+    // ),
+    // SlidableAction(
+    //   onPressed: (ctx) {},
+    //   backgroundColor: AppColors.lightGreen,
+    //   foregroundColor: AppColors.darkGreen,
+    //   icon: CupertinoIcons.cart_fill_badge_plus,
+    // ),
+    // SlidableAction(
+    //   onPressed: (ctx) {},
+    //   backgroundColor: AppColors.red,
+    //   foregroundColor: AppColors.darkGreen,
+    //   icon: CupertinoIcons.delete_solid,
+    // );
   }
 }
