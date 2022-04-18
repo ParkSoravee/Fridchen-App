@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../screens/qrcode/join_family_screen.dart';
 import '../themes/color.dart';
 
 class homedrawer extends StatefulWidget {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/screens/fridge_screen.dart';
+import 'package:fridchen_app/screens/qrcode/add_member_screen.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/widgets/dialog_confirm.dart';
 
@@ -109,11 +110,11 @@ class FamilySelect extends StatelessWidget {
                   iconSize: 40,
                   color: AppColors.darkGreen,
                   onPressed: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //       builder: (context) => QRScreen(),
-                    //     ));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddScreen(),
+                        ));
                   },
                 ),
                 IconButton(
