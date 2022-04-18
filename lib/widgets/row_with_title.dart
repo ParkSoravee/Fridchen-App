@@ -4,7 +4,7 @@ import '../themes/color.dart';
 
 class RowWithTitle extends StatelessWidget {
   final String title;
-  final Widget child;
+  final List<Widget> child;
 
   const RowWithTitle({
     Key? key,
@@ -14,20 +14,23 @@ class RowWithTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            color: AppColors.darkGreen,
-            fontSize: 36,
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: AppColors.darkGreen,
+              fontSize: 36,
+            ),
           ),
-        ),
-        child,
-        // Expanded(
-        //   child: child,
-        // ),
-      ],
+          ...child,
+          // Expanded(
+          //   child: child,
+          // ),
+        ],
+      ),
     );
   }
 }

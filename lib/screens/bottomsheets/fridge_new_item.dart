@@ -42,75 +42,118 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
           children: [
             RowWithTitle(
               title: 'NAME : ',
-              child: Expanded(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    border: InputBorder.none,
-                  ),
-                  cursorColor: AppColors.lightGreen,
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontSize: 36,
+              child: [
+                Expanded(
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      border: InputBorder.none,
+                      filled: true,
+                      isDense: true,
+                      contentPadding: EdgeInsets.fromLTRB(12, 6, 12, 2),
+                    ),
+                    cursorColor: AppColors.lightGreen,
+                    style: TextStyle(
+                      color: AppColors.white,
+                      fontSize: 36,
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
             RowWithTitle(
               title: 'EXP : ',
-              child: Material(
-                color: Colors.transparent,
-                child: exp == null
-                    ? Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        // child: Material(
-                        //   color: Colors.transparent,
-                        child: InkWell(
+              child: [
+                Material(
+                  color: Colors.transparent,
+                  child: exp == null
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          // child: Material(
+                          //   color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () async {
+                              await setExpDate();
+                            },
+                            borderRadius: BorderRadius.circular(5),
+                            child: Icon(
+                              CupertinoIcons.calendar_badge_plus,
+                              color: AppColors.white,
+                              size: 40,
+                            ),
+                          ),
+                          // ),
+                        )
+                      : InkWell(
                           onTap: () async {
                             await setExpDate();
                           },
-                          borderRadius: BorderRadius.circular(5),
-                          child: Icon(
-                            CupertinoIcons.calendar_badge_plus,
-                            color: AppColors.white,
-                            size: 40,
-                          ),
-                        ),
-                        // ),
-                      )
-                    : InkWell(
-                        onTap: () async {
-                          await setExpDate();
-                        },
-                        borderRadius: BorderRadius.circular(15),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Text(
-                            '${DateFormat('dd MMM yyyy').format(exp!)}',
-                            style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: 36,
+                          borderRadius: BorderRadius.circular(15),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 5.0),
+                            child: Text(
+                              '${DateFormat('dd MMM yyyy').format(exp!)}',
+                              style: TextStyle(
+                                color: AppColors.white,
+                                fontSize: 36,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-              ),
+                ),
+              ],
             ),
             RowWithTitle(
               title: 'VOLUME : ',
-              child: Expanded(
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    border: InputBorder.none,
-                  ),
-                  cursorColor: AppColors.lightGreen,
-                  style: TextStyle(
-                    color: AppColors.white,
-                    fontSize: 36,
+              child: [
+                Expanded(
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      floatingLabelBehavior: FloatingLabelBehavior.never,
+                      border: InputBorder.none,
+                      filled: true,
+                      isDense: true,
+                      contentPadding: EdgeInsets.fromLTRB(12, 6, 12, 2),
+                    ),
+                    cursorColor: AppColors.lightGreen,
+                    style: TextStyle(
+                      color: AppColors.white,
+                      fontSize: 36,
+                    ),
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
-              ),
+                Container(
+                  margin: EdgeInsets.only(left: 10),
+                  width: 80,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButtonFormField(
+                      // decoration: ,
+                      value: 'Pieces',
+                      icon: Icon(Icons.keyboard_arrow_down_rounded),
+                      items: [
+                        DropdownMenuItem<String>(
+                          value: 'Pieces',
+                          child: Text('Pieces'),
+                        ),
+                        DropdownMenuItem<String>(
+                          value: 'Grams',
+                          child: Text('Grams'),
+                        ),
+                      ],
+                      // items: items.map((String items) {
+                      //   return DropdownMenuItem(
+                      //     value: items,
+                      //     child: Text(items),
+                      //   );
+                      // }).toList(),
+                      onChanged: (sel) {},
+                    ),
+                  ),
+                ),
+              ],
             ),
             // TODO !
           ],
