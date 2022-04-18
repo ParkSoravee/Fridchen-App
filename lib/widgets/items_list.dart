@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:fridchen_app/providers/fridges.dart';
 
 class ItemsList extends StatefulWidget {
-  final 
+  // final
   @override
   State<ItemsList> createState() => _ItemsListState();
 }
@@ -11,13 +11,6 @@ class ItemsList extends StatefulWidget {
 class _ItemsListState extends State<ItemsList> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-        itemCount: 0,
-        itemBuilder: (ctx, i) {
-          
-        },
-      ),
-    );
+    return Container();
   }
 }

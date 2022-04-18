@@ -7,12 +7,14 @@ class TemplateScreen extends StatelessWidget {
   final Color primaryColor;
   final Color secondaryColor;
   final Widget child;
+  final Function? addNew;
 
   const TemplateScreen({
     required this.title,
     required this.primaryColor,
     required this.secondaryColor,
     required this.child,
+    this.addNew,
   });
 
   @override
@@ -78,6 +80,19 @@ class TemplateScreen extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: addNew != null
+          ? FloatingActionButton(
+              onPressed: () {
+                addNew!();
+              },
+              child: Icon(
+                Icons.add,
+                size: 38,
+                color: AppColors.darkGreen,
+              ),
+              backgroundColor: primaryColor,
+            )
+          : null, //TODO: modal bottom template (very high)
     );
   }
 }

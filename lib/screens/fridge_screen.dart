@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/fridges.dart';
+import 'package:fridchen_app/screens/bottomsheets/fridge_new_item.dart';
 import 'package:fridchen_app/screens/template_screen.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/widgets/fridge_item.dart';
@@ -39,6 +40,16 @@ class _FridgeScreenState extends State<FridgeScreen> {
     setState(() {});
   }
 
+  void addNewFridge() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      barrierColor: AppColors.darkGreen.withOpacity(0.70),
+      isScrollControlled: true,
+      builder: (_) => FridgeNewItem(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final fridgeLists = isSearch
@@ -50,6 +61,7 @@ class _FridgeScreenState extends State<FridgeScreen> {
       title: 'FRIDGE',
       primaryColor: AppColors.lightGreen,
       secondaryColor: AppColors.green,
+      addNew: addNewFridge,
       child: Padding(
         padding: const EdgeInsets.only(top: 25),
         child: Column(
