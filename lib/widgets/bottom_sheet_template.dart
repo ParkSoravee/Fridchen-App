@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/themes/color.dart';
+import 'package:fridchen_app/widgets/custom_button.dart';
 
 class BottomSheetTemplate extends StatelessWidget {
   final Color background;
   final String title;
   final Widget child;
+  final Function() submitForm;
 
   const BottomSheetTemplate({
     Key? key,
     required this.background,
     required this.title,
     required this.child,
+    required this.submitForm,
   }) : super(key: key);
 
   @override
@@ -48,9 +51,33 @@ class BottomSheetTemplate extends StatelessWidget {
             ),
           ),
           Expanded(
-              child: SingleChildScrollView(
-            child: child,
-          )),
+            child: SingleChildScrollView(
+              child: child,
+            ),
+          ),
+          Container(
+            // color: Colors.amber,
+            padding: EdgeInsets.only(top: 25, bottom: 40),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CustomButton(
+                  text: 'Cancel',
+                  primaryColor: AppColors.green,
+                  isPrimary: false,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                CustomButton(
+                  text: 'Confirm',
+                  primaryColor: AppColors.green,
+                  isPrimary: true,
+                  onPressed: submitForm,
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );

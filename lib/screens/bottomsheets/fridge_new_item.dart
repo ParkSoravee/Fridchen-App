@@ -66,11 +66,17 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
     }
   }
 
+  void submitForm() {
+    print('confirm');
+    // TODO
+  }
+
   @override
   Widget build(BuildContext context) {
     return BottomSheetTemplate(
       background: AppColors.green,
       title: 'Add in fridge',
+      submitForm: submitForm,
       child: Form(
         child: Column(
           children: [
