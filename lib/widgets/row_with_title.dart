@@ -5,11 +5,13 @@ import '../themes/color.dart';
 class RowWithTitle extends StatelessWidget {
   final String title;
   final List<Widget> child;
+  final bool isAlignStart;
 
   const RowWithTitle({
     Key? key,
     required this.title,
     required this.child,
+    this.isAlignStart = false,
   }) : super(key: key);
 
   @override
@@ -17,6 +19,8 @@ class RowWithTitle extends StatelessWidget {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 4),
       child: Row(
+        crossAxisAlignment:
+            isAlignStart ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: [
           Text(
             title,

@@ -10,7 +10,7 @@ import 'providers/tags.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env");
-  MySocket.initSocket();
+  // MySocket.initSocket();
   runApp(MyApp());
 }
 
