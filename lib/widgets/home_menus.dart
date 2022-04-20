@@ -25,7 +25,7 @@ class Menus extends StatelessWidget {
           ),
           margin: EdgeInsets.only(bottom: 3, top: size / 4),
           height: size,
-          padding: EdgeInsets.all(14),
+          padding: EdgeInsets.all(15),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(
               Radius.circular(15),
