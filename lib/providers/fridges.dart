@@ -128,13 +128,15 @@ class FridgeItems with ChangeNotifier {
   }
 
   void deleteItem(String id) {
-    // TODO save to DB
     // TODO socket
   }
 
-  void addItem() {
-    // * how to gen id??
-    // TODO save to DB
-    // TODO socket
+  void addNewItem(FridgeItem item) {
+    try {
+      print('saved!');
+      // TODO socket
+    } catch (e) {
+      print(e); // TODO: throw no internet connection
+    }
   }
 }

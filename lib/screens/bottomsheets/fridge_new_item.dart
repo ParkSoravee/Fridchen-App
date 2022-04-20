@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fridchen_app/providers/fridges.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/utils/date.dart';
 import 'package:fridchen_app/widgets/bottom_sheet_template.dart';
 import 'package:fridchen_app/widgets/row_with_title.dart';
-import 'package:fridchen_app/widgets/tag_list.dart';
 import 'package:fridchen_app/widgets/tag_select.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../providers/tags.dart';
 
@@ -19,9 +20,13 @@ class FridgeNewItem extends StatefulWidget {
 }
 
 class _FridgeNewItemState extends State<FridgeNewItem> {
+  final _form = GlobalKey<FormState>();
+  final _volumnFocusNode = FocusNode();
+
+  String? _id;
   String? _name;
   DateTime? _exp;
-  double? _volumn;
+  double? _volume;
   double? _min;
   double? _max;
   String? _selectedUnit;
@@ -68,7 +73,54 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
 
   void submitForm() {
     print('confirm');
-    // TODO
+    final isValid = _form.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+    _form.currentState!.save();
+    // gen id
+    _id = Uuid().v1();
+    // get tags
+    final _tags =
+        Provider.of<Tags>(context, listen: false).getTagsById(_tagsId);
+
+    print(_id);
+    print(_name);
+    print(_exp.toString());
+    print(_volume);
+    print(_selectedUnit);
+    print(_min);
+    print(_max);
+    print(_tagsId.toString());
+
+    final fridgeItem = FridgeItem(
+      id: _id!,
+      name: _name!,
+      exp: _exp,
+      countLeft: _volume!,
+      unit: _selectedUnit!,
+      tags: _tags,
+    );
+    try {
+      Provider.of<FridgeItems>(context, listen: false).addNewItem(fridgeItem);
+      Navigator.pop(context);
+      // TODO vvv
+      // widget.showSavedConfirm(_name);
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: Text(e.toString()),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('Okay'),
+                  )
+                ],
+              ));
+    }
   }
 
   @override
@@ -78,6 +130,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
       title: 'Add in fridge',
       submitForm: submitForm,
       child: Form(
+        key: _form,
         child: Column(
           children: [
             RowWithTitle(
@@ -97,6 +150,29 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                       color: AppColors.white,
                       fontSize: 36,
                     ),
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (_) async {
+                      FocusScope.of(context).requestFocus(_volumnFocusNode);
+                      await setExpDate();
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter item name.';
+                      }
+
+                      if (value.length > 25) {
+                        return 'Name can be only 1-25 characters.';
+                      }
+
+                      // if (value.contains(special)) {
+                      //   return 'Name can have only 1-25 characters';
+                      // }
+
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _name = value;
+                    },
                   ),
                 ),
               ],
@@ -150,6 +226,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                 Container(
                   width: 100,
                   child: TextFormField(
+                    focusNode: _volumnFocusNode,
                     decoration: InputDecoration(
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       border: InputBorder.none,
@@ -164,6 +241,29 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                     ),
                     keyboardType:
                         TextInputType.numberWithOptions(decimal: true),
+                    textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter item amount or volume.';
+                      }
+
+                      if (double.tryParse(value) == null) {
+                        return 'Invalid volume.';
+                      }
+
+                      if (double.parse(value) > 10000) {
+                        return 'Invalid volume.';
+                      }
+
+                      if (_selectedUnit == null) {
+                        return 'Invalid unit.';
+                      }
+
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _volume = double.parse(value!);
+                    },
                   ),
                 ),
                 SizedBox(
@@ -252,6 +352,9 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                   setSelectedTags: setSelectedTags,
                 ),
               ],
+            ),
+            SizedBox(
+              height: 10,
             ),
           ],
         ),

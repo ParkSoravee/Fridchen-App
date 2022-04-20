@@ -23,7 +23,7 @@ class _TagSelectState extends State<TagSelect> {
     return Expanded(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-        // color: Color(0x0A000000),
+        color: Color(0x0A000000),
         height: 80,
         // child: TagList(
         //   tags: widget.tags,
