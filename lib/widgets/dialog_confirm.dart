@@ -6,11 +6,13 @@ class DialogConfirm extends StatelessWidget {
   final Color primaryColor;
   final Color secondaryColor;
   final Widget? content;
+  final Function() confirm;
 
   const DialogConfirm({
     required this.title,
     required this.primaryColor,
     required this.secondaryColor,
+    required this.confirm,
     this.content,
   });
   @override
@@ -55,7 +57,7 @@ class DialogConfirm extends StatelessWidget {
               downsize: 5,
               primaryColor: primaryColor,
               text: 'Confirm',
-              onPressed: () {},
+              onPressed: confirm,
             ),
           ],
         ),

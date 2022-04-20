@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fridchen_app/providers/family.dart';
 import 'package:fridchen_app/screens/fridge_screen.dart';
 import 'package:fridchen_app/screens/qrcode/add_member_screen.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/widgets/dialog_confirm.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/home_drawer.dart';
 import '../widgets/home_menus.dart';
+import '../widgets/row_with_title.dart';
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -62,25 +65,77 @@ class FamilySelect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void addNewFamily() {
-      String _familyName;
+    final fridchenFamily = Provider.of<Families>(context);
+    final _form = GlobalKey<FormFieldState>();
+    String fridchenName = '';
 
+    Future<void> addNewFridchen() async {
+      final isValid = _form.currentState!.validate();
+      if (!isValid) return;
+      _form.currentState!.save();
+
+      try {
+        await fridchenFamily.newFamily(fridchenName);
+        // TODO call bottom success
+      } catch (e) {
+        print(e);
+        // TODO call bottom error
+      }
+      Navigator.pop(context);
+    }
+
+    void addNewFridchenDialog() {
       showDialog(
         context: context,
         builder: (_) => DialogConfirm(
           title: 'New fridchen',
           primaryColor: AppColors.yellow,
           secondaryColor: AppColors.darkGreen,
-          content: Row(
-            children: [
-              Text(
-                'NAME: ',
-                style: TextStyle(
-                  fontSize: 40,
-                  color: AppColors.white,
+          confirm: addNewFridchen,
+          content: RowWithTitle(
+            title: 'NAME :',
+            isAlignStart: true,
+            color: AppColors.white,
+            child: [
+              Expanded(
+                child: TextFormField(
+                  key: _form,
+                  decoration: InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    border: InputBorder.none,
+                    filled: true,
+                    isDense: true,
+                    contentPadding: EdgeInsets.fromLTRB(12, 0, 12, 2),
+                    hintText: 'Apartment',
+                    hintStyle: TextStyle(
+                      color: AppColors.white.withOpacity(0.2),
+                      fontSize: 36,
+                    ),
+                  ),
+                  cursorColor: AppColors.yellow,
+                  style: TextStyle(
+                    color: AppColors.white,
+                    fontSize: 36,
+                  ),
+                  textInputAction: TextInputAction.next,
+                  onFieldSubmitted: (value) {
+                    addNewFridchen();
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter fridchen name.';
+                    }
+
+                    if (value.length > 12) {
+                      return 'Name can be only 1-12 characters.';
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    fridchenName = value!.trim();
+                  },
                 ),
               ),
-              Expanded(child: TextField()) // TODO:
             ],
           ),
         ),
@@ -181,7 +236,7 @@ class FamilySelect extends StatelessWidget {
                     splashRadius: 35,
                     iconSize: 60,
                     color: AppColors.darkGreen,
-                    onPressed: addNewFamily,
+                    onPressed: addNewFridchenDialog,
                   ),
                   // Spacer(),
                 ],

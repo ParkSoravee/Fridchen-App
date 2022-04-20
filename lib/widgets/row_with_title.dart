@@ -4,6 +4,7 @@ import '../themes/color.dart';
 
 class RowWithTitle extends StatelessWidget {
   final String title;
+  final Color? color;
   final List<Widget> child;
   final bool isAlignStart;
 
@@ -12,6 +13,7 @@ class RowWithTitle extends StatelessWidget {
     required this.title,
     required this.child,
     this.isAlignStart = false,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -25,7 +27,7 @@ class RowWithTitle extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              color: AppColors.darkGreen,
+              color: color ?? AppColors.darkGreen,
               fontSize: 36,
             ),
           ),

@@ -50,9 +50,13 @@ class Families with ChangeNotifier {
     return [..._families];
   }
 
-  Future<void> newFamily() async {
-    // check internet
-    // add _families
-    // socket
+  Future<void> newFamily(String name) async {
+    try {
+      // add _families
+      // post api
+      print(name);
+    } catch (e) {
+      print(e);
+    }
   }
 }
