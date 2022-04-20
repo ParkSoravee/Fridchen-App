@@ -18,6 +18,8 @@ class BottomSheetTemplate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isKeyboard = MediaQuery.of(context).viewInsets.bottom < 30;
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 35,
@@ -55,9 +57,13 @@ class BottomSheetTemplate extends StatelessWidget {
               child: child,
             ),
           ),
+          // if (MediaQuery.of(context).viewInsets.bottom < 30)
           Container(
             // color: Colors.amber,
-            padding: EdgeInsets.only(top: 25, bottom: 40),
+            padding: EdgeInsets.only(
+              top: isKeyboard ? 25 : 20,
+              bottom: isKeyboard ? 40 : 20,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

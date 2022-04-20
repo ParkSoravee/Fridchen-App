@@ -46,7 +46,10 @@ class _FridgeScreenState extends State<FridgeScreen> {
       backgroundColor: Colors.transparent,
       barrierColor: AppColors.darkGreen.withOpacity(0.70),
       isScrollControlled: true,
-      builder: (_) => FridgeNewItem(),
+      builder: (_) => Padding(
+        padding: MediaQuery.of(context).viewInsets,
+        child: FridgeNewItem(),
+      ),
     );
   }
 
