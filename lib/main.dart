@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fridchen_app/providers/family.dart';
 import 'package:fridchen_app/providers/fridges.dart';
+import 'package:fridchen_app/providers/recipes.dart';
 import 'package:fridchen_app/screens/home_screen.dart';
 import 'package:fridchen_app/socket.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => FridgeItems(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Recipes(),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Tags(),

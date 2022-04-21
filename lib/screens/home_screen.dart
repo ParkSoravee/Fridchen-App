@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/family.dart';
 import 'package:fridchen_app/screens/fridge_screen.dart';
 import 'package:fridchen_app/screens/qrcode/add_member_screen.dart';
+import 'package:fridchen_app/screens/recipe_screen.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/widgets/dialog_confirm.dart';
 import 'package:provider/provider.dart';
@@ -284,7 +285,13 @@ class Menu extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => RecipeScreen(),
+                    ),
+                  );
+                },
                 child: Menus(
                   image: 'assets/images/recipe.png',
                   title: 'RECIPE',

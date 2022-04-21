@@ -55,9 +55,9 @@ class _FridgeScreenState extends State<FridgeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final fridgeLists = isSearch
-        ? Provider.of<FridgeItems>(context).search(searchStr, searchTags)
-        : Provider.of<FridgeItems>(context).items;
+    final fridge = Provider.of<FridgeItems>(context);
+    final fridgeLists =
+        isSearch ? fridge.search(searchStr, searchTags) : fridge.items;
 
     final defaultTags = Provider.of<Tags>(context, listen: false).defaultTags;
     return TemplateScreen(
@@ -65,45 +65,42 @@ class _FridgeScreenState extends State<FridgeScreen> {
       primaryColor: AppColors.lightGreen,
       secondaryColor: AppColors.green,
       addNew: addNewFridge,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 25),
-        child: Column(
-          children: [
-            SearchBar(
-              tags: defaultTags,
-              color: AppColors.green,
-              bgColor: AppColors.lightGreen,
-              setSearchStr: setStr,
-              setTags: setTags,
-            ),
-            // isSearch
-            //     ? Text(
-            //         'searching... ' + searchStr + searchTags.toString(),
-            //         style: TextStyle(color: Colors.amber, fontSize: 30),
-            //       )
-            //     : Text(
-            //         'not search',
-            //         style: TextStyle(color: Colors.amber, fontSize: 30),
-            //       ),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.only(
-                  top: 12,
-                  bottom: MediaQuery.of(context).padding.bottom,
+      child: Column(
+        children: [
+          SearchBar(
+            tags: defaultTags,
+            color: AppColors.green,
+            bgColor: AppColors.lightGreen,
+            setSearchStr: setStr,
+            setTags: setTags,
+          ),
+          // isSearch
+          //     ? Text(
+          //         'searching... ' + searchStr + searchTags.toString(),
+          //         style: TextStyle(color: Colors.amber, fontSize: 30),
+          //       )
+          //     : Text(
+          //         'not search',
+          //         style: TextStyle(color: Colors.amber, fontSize: 30),
+          //       ),
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.only(
+                top: 12,
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
+              child: ListView.builder(
+                itemBuilder: (ctx, i) => FridgeListItem(
+                  key: ValueKey(fridgeLists[i].id),
+                  item: fridgeLists[i],
                 ),
-                child: ListView.builder(
-                  itemBuilder: (ctx, i) => FridgeListItem(
-                    key: ValueKey(fridgeLists[i].id),
-                    item: fridgeLists[i],
-                  ),
-                  itemCount: fridgeLists.length,
-                  padding: EdgeInsets.zero,
-                  // physics: ScrollPhysics(),
-                ),
+                itemCount: fridgeLists.length,
+                padding: EdgeInsets.zero,
+                // physics: ScrollPhysics(),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

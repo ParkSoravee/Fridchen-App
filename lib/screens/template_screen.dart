@@ -67,6 +67,7 @@ class TemplateScreen extends StatelessWidget {
                 Expanded(
                   child: Container(
                     width: double.infinity,
+                    padding: const EdgeInsets.only(top: 25),
                     decoration: BoxDecoration(
                       borderRadius:
                           BorderRadius.only(topRight: Radius.circular(80)),
