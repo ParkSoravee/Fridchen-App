@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/family.dart';
 import 'package:fridchen_app/screens/fridge_screen.dart';
+import 'package:fridchen_app/screens/list_screen.dart';
 import 'package:fridchen_app/screens/qrcode/add_member_screen.dart';
 import 'package:fridchen_app/screens/recipe_screen.dart';
 import 'package:fridchen_app/themes/color.dart';
@@ -300,7 +301,13 @@ class Menu extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ListScreen(),
+                    ),
+                  );
+                },
                 child: Menus(
                   image: 'assets/images/list.png',
                   title: 'LIST',
