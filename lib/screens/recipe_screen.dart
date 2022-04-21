@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fridchen_app/screens/bottomsheets/recipe_new_item.dart';
 import 'package:fridchen_app/screens/template_screen.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +48,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
       isScrollControlled: true,
       builder: (_) => Padding(
         padding: MediaQuery.of(context).viewInsets,
-        // child: FridgeNewItem(),
+        child: RecipeNewItem(),
       ),
     );
   }
@@ -63,6 +64,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
       title: 'RECIPE',
       primaryColor: AppColors.orange,
       secondaryColor: AppColors.yellow,
+      addNew: addNewRecipe,
       child: Column(
         children: [
           SearchBar(
@@ -85,7 +87,6 @@ class _RecipeScreenState extends State<RecipeScreen> {
                 ),
                 itemCount: recipeList.length,
                 padding: EdgeInsets.zero,
-                // physics: ScrollPhysics(),
               ),
             ),
           ),
