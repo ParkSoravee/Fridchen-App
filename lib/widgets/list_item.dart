@@ -1,5 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fridchen_app/screens/bottomsheets/fridge_new_item.dart';
+import 'package:fridchen_app/widgets/dialog_confirm.dart';
 import 'package:fridchen_app/widgets/tag_list.dart';
+import 'package:provider/provider.dart';
 
 import '../providers/list.dart';
 import '../themes/color.dart';
@@ -14,10 +19,40 @@ class ListListItem extends StatefulWidget {
 
 class _ListListItemState extends State<ListListItem> {
   bool isTick = false;
+
   void toggleTick() {
     isTick = !isTick;
-    // Provider.of<ListItems>(context, listen:false).tickById(item.id);
+    Provider.of<ListItems>(context, listen: false).setTick(widget.item.id);
     setState(() {});
+  }
+
+  void deleteItem() {
+    try {
+      Provider.of<ListItems>(context, listen: false).deleteItem(widget.item.id);
+    } catch (e) {
+      print(e);
+      //TODO: show bottom error
+    }
+  }
+
+  Future<void> addToFridge(Function? setIsConform) async {
+    if (setIsConform == null) {
+      setIsConform = () {
+        deleteItem();
+      };
+    }
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      barrierColor: AppColors.darkGreen.withOpacity(0.70),
+      isScrollControlled: true,
+      builder: (_) => Padding(
+        padding: MediaQuery.of(context).viewInsets,
+        child: FridgeNewItem(
+          setIsComfirm: setIsConform,
+        ), // TODO: default value
+      ),
+    );
   }
 
   @override
@@ -30,8 +65,60 @@ class _ListListItemState extends State<ListListItem> {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 18),
-      child: Dismissible(
+      child: Slidable(
         key: widget.key!,
+        endActionPane: ActionPane(
+          motion: const ScrollMotion(),
+          dismissible: DismissiblePane(
+            closeOnCancel: true,
+            onDismissed: deleteItem,
+            confirmDismiss: () async {
+              bool isDel = false;
+              await addToFridge(() {
+                isDel = true;
+              });
+              return isDel;
+            },
+          ),
+          extentRatio: 0.4,
+          children: [
+            CustomSlidableAction(
+              onPressed: (_) async {
+                await showDialog(
+                  context: context,
+                  builder: (ctx) => DialogConfirm(
+                    title: 'Are you sure?',
+                    primaryColor: AppColors.yellow,
+                    secondaryColor: AppColors.darkGreen,
+                    confirm: () {
+                      deleteItem();
+                      Navigator.pop(context);
+                    },
+                  ),
+                );
+              },
+              backgroundColor: AppColors.red,
+              foregroundColor: AppColors.darkGreen,
+              child: Icon(
+                CupertinoIcons.delete_solid,
+                color: AppColors.darkGreen,
+                size: 30,
+              ),
+            ),
+            CustomSlidableAction(
+              onPressed: (ctx) async {
+                await addToFridge(null);
+              },
+              backgroundColor: AppColors.lightGreen,
+              foregroundColor: AppColors.darkGreen,
+              child: Image.asset(
+                'assets/images/fridge.png',
+                color: AppColors.darkGreen,
+                height: 30,
+              ),
+            ),
+          ],
+        ),
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
           decoration: BoxDecoration(
@@ -70,21 +157,15 @@ class _ListListItemState extends State<ListListItem> {
                   children: [
                     Row(
                       children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Text(
-                                widget.item.name,
-                                style: TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: 26,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                            ],
+                        Text(
+                          widget.item.name,
+                          style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 26,
                           ),
+                        ),
+                        SizedBox(
+                          width: 4,
                         ),
                       ],
                     ),

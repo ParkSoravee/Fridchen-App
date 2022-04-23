@@ -16,6 +16,8 @@ class RecipeNewItem extends StatefulWidget {
 
 class _RecipeNewItemState extends State<RecipeNewItem> {
   final _form = GlobalKey<FormState>();
+  final primaryColor = AppColors.yellow;
+  final secondaryColor = AppColors.orange;
 
   String? _name;
   List<String> _tagsId = [];
@@ -36,7 +38,7 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
   Widget build(BuildContext context) {
     return BottomSheetTemplate(
       title: 'New Recipe',
-      background: AppColors.orange,
+      background: primaryColor,
       submitForm: submitForm,
       child: Form(
         key: _form,
@@ -54,7 +56,7 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
                       isDense: true,
                       contentPadding: EdgeInsets.fromLTRB(12, 6, 12, 2),
                     ),
-                    cursorColor: AppColors.yellow,
+                    cursorColor: secondaryColor,
                     style: TextStyle(
                       color: AppColors.white,
                       fontSize: 36,
@@ -79,7 +81,7 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
                       return null;
                     },
                     onSaved: (value) {
-                      // _name = value;
+                      _name = value;
                     },
                   ),
                 ),
@@ -103,13 +105,13 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
                       Icon(
                         Icons.add_rounded,
                         // size: 32,
-                        color: AppColors.orange,
+                        color: primaryColor,
                       ),
                       Text(
                         'New Ingredient',
                         style: TextStyle(
                           fontSize: 19,
-                          color: AppColors.orange,
+                          color: primaryColor,
                           height: 1.3,
                         ),
                       ),
@@ -142,13 +144,13 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
                       Icon(
                         Icons.add_rounded,
                         // size: 32,
-                        color: AppColors.orange,
+                        color: primaryColor,
                       ),
                       Text(
                         'New Step',
                         style: TextStyle(
                           fontSize: 19,
-                          color: AppColors.orange,
+                          color: primaryColor,
                           height: 1.3,
                         ),
                       ),

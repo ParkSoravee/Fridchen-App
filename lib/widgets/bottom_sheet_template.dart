@@ -7,6 +7,7 @@ class BottomSheetTemplate extends StatelessWidget {
   final String title;
   final Widget child;
   final Function() submitForm;
+  final bool isShort;
 
   const BottomSheetTemplate({
     Key? key,
@@ -14,6 +15,7 @@ class BottomSheetTemplate extends StatelessWidget {
     required this.title,
     required this.child,
     required this.submitForm,
+    this.isShort = false,
   }) : super(key: key);
 
   @override
@@ -24,7 +26,9 @@ class BottomSheetTemplate extends StatelessWidget {
       padding: EdgeInsets.symmetric(
         horizontal: 35,
       ),
-      height: MediaQuery.of(context).size.height - 150,
+      height: isShort
+          ? MediaQuery.of(context).size.height / 1.9
+          : MediaQuery.of(context).size.height - 150,
       decoration: BoxDecoration(
         color: background,
         borderRadius: BorderRadius.only(

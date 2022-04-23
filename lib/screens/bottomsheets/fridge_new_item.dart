@@ -13,7 +13,8 @@ import 'package:uuid/uuid.dart';
 import '../../providers/tags.dart';
 
 class FridgeNewItem extends StatefulWidget {
-  const FridgeNewItem({Key? key}) : super(key: key);
+  final Function? setIsComfirm;
+  const FridgeNewItem({Key? key, this.setIsComfirm}) : super(key: key);
 
   @override
   State<FridgeNewItem> createState() => _FridgeNewItemState();
@@ -103,6 +104,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
     );
     try {
       Provider.of<FridgeItems>(context, listen: false).addNewItem(fridgeItem);
+      if (widget.setIsComfirm != null) widget.setIsComfirm!();
       Navigator.pop(context);
       // TODO vvv
       // widget.showSavedConfirm(_name);

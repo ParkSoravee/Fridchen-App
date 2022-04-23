@@ -1,3 +1,8 @@
+import 'dart:convert';
+
+import 'package:fridchen_app/providers/fridges.dart';
+import 'package:fridchen_app/providers/tags.dart';
+import 'package:fridchen_app/themes/color.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -7,18 +12,10 @@ class MySocket {
   // late IO.Socket socket;
   static void initSocket() {
     try {
-      IO.Socket socket =
-          IO.io('http://ebfc-58-11-2-212.ngrok.io', <String, dynamic>{
+      IO.Socket socket = IO.io(dotenv.env['SOCKET'], <String, dynamic>{
         'transports': ['websocket'],
         'autoConnect': false,
       });
-
-      // IO.Socket socket = IO.io(
-      //     'http://ebfc-58-11-2-212.ngrok.io',
-      //     OptionBuilder()
-      //         .setTransports(['websocket']) // for Flutter or Dart VM
-      //         .disableAutoConnect() // disable auto-connection
-      //         .build());
 
       // Connect to websocket
       print('connecting socket...');
@@ -27,11 +24,32 @@ class MySocket {
 
       socket.onConnect((_) {
         print('connect ${socket.id}');
-        socket.emit('msg', 'test');
-        socket.emit('foo', 'test');
+        print('emiting');
+        socket.emit(
+            'joinRoom',
+            json.encode({
+              'room': '123456b',
+            }));
+        socket.emit(
+            'newfridge',
+            json.encode({
+              'name': 'hello',
+              'countLeft': 99,
+              'unit': 'Grams',
+              'exp': DateTime(2022, 2, 8).toIso8601String(),
+              'tags': [
+                {
+                  '2': 'Vagetable',
+                },
+                {'4': 'Fresh'},
+              ],
+            }));
+        print('emited');
       });
 
-      socket.on('event', (data) => print(data));
+      socket.on('newfridge', (data) => print(data));
+      socket.on('message', (data) => print(data));
+      socket.on('roomUsers', (data) => print('room user:' + data.toString()));
 
       socket.onDisconnect((_) => print('disconnect'));
 

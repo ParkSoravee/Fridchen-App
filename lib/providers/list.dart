@@ -72,13 +72,38 @@ class ListItems with ChangeNotifier {
     return [...searchItems];
   }
 
+  Future<void> addNewItem(String name, List<Tag> tags) async {
+    try {
+      print('saving');
+      // TODO api
+    } catch (e) {
+      print(e); // TODO: throw no internet connection
+      throw e;
+    }
+  }
+
+  void deleteItem(String id) {
+    final backupItem = _items.firstWhere((element) => element.id == id);
+    final backupItemIndex = _items.indexWhere((element) => element.id == id);
+    _items.removeWhere((element) => element.id == id);
+    try {
+      // delete
+      // TODO api
+      notifyListeners();
+    } catch (e) {
+      _items.insert(backupItemIndex, backupItem);
+      print(e);
+      throw e;
+    }
+  }
+
   void setTick(String id) {
     final selectItem = _items.firstWhere((element) => element.id == id);
     // set isStar
     selectItem.isTick = !selectItem.isTick;
     // rebuild notifylistener
-    notifyListeners();
+    // notifyListeners();
     // TODO save to DB
-    // TODO socket
+    // TODO api
   }
 }
