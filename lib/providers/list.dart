@@ -35,7 +35,7 @@ class ListItems with ChangeNotifier {
       ],
     ),
     ListItem(
-      id: '3',
+      id: '34567',
       name: 'Bok choy',
       tags: [
         Tag('4', 'Fresh', AppColors.green.hashCode),
@@ -74,10 +74,14 @@ class ListItems with ChangeNotifier {
 
   Future<void> addNewItem(String name, List<Tag> tags) async {
     try {
+      final isValid = _items.indexWhere(
+            (element) => element.name.toLowerCase() == name.toLowerCase(),
+          ) !=
+          -1;
+      if (isValid) return;
       print('saving');
       // TODO api
     } catch (e) {
-      print(e); // TODO: throw no internet connection
       throw e;
     }
   }

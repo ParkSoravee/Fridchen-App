@@ -6,6 +6,7 @@ class FridgeItem {
   final String id;
   String name;
   double countLeft;
+  double? min;
   String unit;
   DateTime? exp;
   List<Tag> tags;
@@ -16,6 +17,7 @@ class FridgeItem {
     required this.name,
     required this.countLeft,
     required this.unit,
+    this.min,
     this.exp,
     this.tags = const [],
     this.isStar = false,
@@ -27,7 +29,8 @@ class FridgeItems with ChangeNotifier {
     FridgeItem(
       id: '12345',
       name: 'Milk',
-      countLeft: 0.5,
+      countLeft: 5,
+      min: 10,
       unit: 'Litre',
       isStar: true,
       exp: DateTime(2022, 2, 11),
@@ -40,6 +43,7 @@ class FridgeItems with ChangeNotifier {
       id: '23456',
       name: 'Pork',
       countLeft: 200,
+      min: 100,
       unit: 'Grams',
       exp: DateTime(2022, 2, 13),
       tags: [
@@ -109,34 +113,83 @@ class FridgeItems with ChangeNotifier {
     return [...searchItems];
   }
 
-  void setStar(String id) {
+  Future<void> setStar(String id) async {
     final selectItem = _items.firstWhere((element) => element.id == id);
     // set isStar
     selectItem.isStar = !selectItem.isStar;
     // rebuild notifylistener
     notifyListeners();
+    // TODO api
     // TODO save to DB
-    // TODO socket
   }
 
   void setExp(String id, DateTime date) {
-    final selectItem = _items.firstWhere((element) => element.id == id);
-    selectItem.exp = date;
-    notifyListeners();
-    // TODO save to DB
-    // TODO socket
+    try {
+      final selectItem = _items.firstWhere((element) => element.id == id);
+      selectItem.exp = date;
+      notifyListeners();
+      // TODO api
+    } catch (e) {
+      throw e;
+    }
   }
 
   void deleteItem(String id) {
-    // TODO socket
+    final backupItem = _items.firstWhere((element) => element.id == id);
+    final backupItemIndex = _items.indexWhere((element) => element.id == id);
+    _items.removeWhere((element) => element.id == id);
+    try {
+      // delete
+      // TODO api
+      notifyListeners();
+    } catch (e) {
+      _items.insert(backupItemIndex, backupItem);
+      throw e;
+    }
   }
 
-  void addNewItem(FridgeItem item) {
+  Future<void> addNewItem(FridgeItem item) async {
     try {
       print('saved!');
-      // TODO socket
+      // TODO API
     } catch (e) {
-      print(e); // TODO: throw no internet connection
+      throw e; // TODO: throw no internet connection
+    }
+  }
+
+  void consumeItem(String id, double amount) {
+    try {
+      final item = _items.firstWhere((element) => element.id == id);
+      final isEmpty =
+          double.parse((item.countLeft - amount).toStringAsFixed(2)) <= 0;
+      final isStar = item.isStar;
+
+      // check is going to pass the min value? if star API add to list
+      if (isStar && item.min != null) {
+        final isPassMin =
+            item.countLeft > item.min! && item.countLeft - amount <= item.min!;
+        if (isPassMin) {
+          print('add to list');
+          // TODO: API add to list
+        }
+      }
+      // if not empty? API update : API delete
+      if (!isEmpty) {
+        final newItem = FridgeItem(
+          id: item.id,
+          name: item.name,
+          countLeft: double.parse((item.countLeft - amount).toStringAsFixed(2)),
+          unit: item.unit,
+        );
+        print(
+            'update left: ${double.parse((item.countLeft - amount).toStringAsFixed(2))}');
+        // TODO: API update
+      } else {
+        print('delete');
+        // TODO: API delete
+      }
+    } catch (e) {
+      throw e; // TODO: throw no internet connection
     }
   }
 }
