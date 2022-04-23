@@ -14,7 +14,7 @@ class CustomButton extends StatelessWidget {
   const CustomButton({
     required this.text,
     required this.isPrimary,
-    this.isBorder = false,
+    this.isBorder = true,
     required this.onPressed,
     required this.primaryColor,
     this.secondaryColor = AppColors.darkGreen,
@@ -28,12 +28,12 @@ class CustomButton extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: isPrimary ? primaryColor : secondaryColor,
+          color: isPrimary ? secondaryColor : primaryColor,
           fontSize: 24,
         ),
       ),
       style: OutlinedButton.styleFrom(
-        backgroundColor: isPrimary ? secondaryColor : primaryColor,
+        backgroundColor: isPrimary ? primaryColor : secondaryColor,
         padding: EdgeInsets.fromLTRB(
           27 - downsize,
           17 - downsize,
@@ -43,10 +43,12 @@ class CustomButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        side: BorderSide(
-          width: 4.5,
-          color: isBorder ? primaryColor : secondaryColor,
-        ),
+        side: isBorder
+            ? BorderSide(
+                width: 4.5,
+                color: primaryColor,
+              )
+            : null,
       ),
     );
   }

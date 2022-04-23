@@ -4,32 +4,36 @@ import 'package:fridchen_app/widgets/custom_button.dart';
 class DialogConfirm extends StatelessWidget {
   final String title;
   final Color primaryColor;
-  final Color secondaryColor;
+  final Color backgroundColor;
   final Widget? content;
   final Function() confirm;
+  final bool isCenterTitle;
+  final bool smallTitle;
 
   const DialogConfirm({
     required this.title,
     required this.primaryColor,
-    required this.secondaryColor,
+    required this.backgroundColor,
     required this.confirm,
     this.content,
+    this.isCenterTitle = false,
+    this.smallTitle = false,
   });
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       insetPadding: EdgeInsets.zero,
-      backgroundColor: secondaryColor,
+      backgroundColor: backgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
       ),
       title: Text(
         title,
         style: TextStyle(
-          fontSize: 45, //TODO: when long text
+          fontSize: smallTitle ? 30 : 45, //TODO: when long text
           color: primaryColor,
         ),
-        textAlign: content == null ? TextAlign.center : null,
+        textAlign: isCenterTitle ? TextAlign.center : null,
       ),
       content: content == null
           ? null
@@ -42,20 +46,20 @@ class DialogConfirm extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             CustomButton(
-              isPrimary: true,
-              isBorder: true,
+              isPrimary: false,
               downsize: 5,
               primaryColor: primaryColor,
+              secondaryColor: backgroundColor,
               text: 'Cancel',
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
             CustomButton(
-              isPrimary: false,
-              isBorder: true,
+              isPrimary: true,
               downsize: 5,
               primaryColor: primaryColor,
+              secondaryColor: backgroundColor,
               text: 'Confirm',
               onPressed: confirm,
             ),

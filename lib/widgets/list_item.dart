@@ -89,7 +89,7 @@ class _ListListItemState extends State<ListListItem> {
                   builder: (ctx) => DialogConfirm(
                     title: 'Are you sure?',
                     primaryColor: AppColors.yellow,
-                    secondaryColor: AppColors.darkGreen,
+                    backgroundColor: AppColors.darkGreen,
                     confirm: () {
                       deleteItem();
                       Navigator.pop(context);

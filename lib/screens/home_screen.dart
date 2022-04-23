@@ -92,7 +92,7 @@ class FamilySelect extends StatelessWidget {
         builder: (_) => DialogConfirm(
           title: 'New fridchen',
           primaryColor: AppColors.yellow,
-          secondaryColor: AppColors.darkGreen,
+          backgroundColor: AppColors.darkGreen,
           confirm: addNewFridchen,
           content: RowWithTitle(
             title: 'NAME :',
