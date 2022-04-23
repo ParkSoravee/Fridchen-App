@@ -84,7 +84,14 @@ class _HomeDrawerState extends State<HomeDrawer> {
                 'JOIN',
                 style: TextStyle(color: Colors.white, fontSize: 26),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => JoinScreen(),
+                  ),
+                );
+              },
             )),
             SizedBox(
               height: 20,
