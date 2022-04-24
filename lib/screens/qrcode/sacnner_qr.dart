@@ -40,14 +40,14 @@ class _scanner_qrState extends State<scanner_qr> {
         alignment: Alignment.center,
         children: <Widget>[
           buildQrView(context),
-          Positioned(
-            bottom: 20,
-            child: buildResult(),
-          ),
-          Positioned(
-            top: 10,
-            child: buildControlButtons(),
-          )
+          // Positioned(
+          //   bottom: 20,
+          //   child: buildResult(),
+          // ),
+          // Positioned(
+          //   top: 10,
+          //   child: buildControlButtons(),
+          // )
         ],
       ),
     );
@@ -108,7 +108,7 @@ class _scanner_qrState extends State<scanner_qr> {
           barcode != null ? 'Result : ${barcode!.code}' : 'Scan a code!',
           maxLines: 3,
           style: TextStyle(
-              fontSize: 16, color: Colors.white, fontFamily: "BebasNeue"),
+              fontSize: 20, color: Colors.white, fontFamily: "BebasNeue"),
         ),
       );
 
@@ -120,7 +120,7 @@ class _scanner_qrState extends State<scanner_qr> {
             borderRadius: 10,
             borderWidth: 10,
             borderLength: 20,
-            cutOutSize: MediaQuery.of(context).size.width * 0.8),
+            cutOutSize: MediaQuery.of(context).size.width * 1),
       );
   void onQRViewCreated(QRViewController controller) {
     setState(() => this.controller = controller);
