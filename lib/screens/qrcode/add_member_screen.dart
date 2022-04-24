@@ -28,19 +28,24 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                       height: MediaQuery.of(context).size.height * 0.5,
                       width: double.infinity,
                       decoration: BoxDecoration(color: Colors.white),
-                      child: QrImage(
-                        data: 'data in put',
-                        version: QrVersions.auto,
-                        errorStateBuilder: (cxt, err) {
-                          return Container(
-                            child: Center(
-                                child: Text("Something went wrong...",
-                                    style: TextStyle(
-                                      fontSize: 35,
-                                      color: AppColors.darkGreen,
-                                    ))),
-                          );
-                        },
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Center(
+                          child: QrImage(
+                            data: 'data in put',
+                            version: QrVersions.auto,
+                            errorStateBuilder: (cxt, err) {
+                              return Container(
+                                child: Center(
+                                    child: Text("Something went wrong...",
+                                        style: TextStyle(
+                                          fontSize: 35,
+                                          color: AppColors.darkGreen,
+                                        ))),
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     )
                   : Container(
