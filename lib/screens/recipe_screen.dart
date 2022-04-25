@@ -48,7 +48,9 @@ class _RecipeScreenState extends State<RecipeScreen> {
       isScrollControlled: true,
       builder: (_) => Padding(
         padding: MediaQuery.of(context).viewInsets,
-        child: RecipeNewItem(),
+        child: RecipeNewItem(
+          onEdit: false,
+        ),
       ),
     );
   }

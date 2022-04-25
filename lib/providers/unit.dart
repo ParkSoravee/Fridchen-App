@@ -1,24 +1,10 @@
 import 'package:flutter/material.dart';
 
-import '../themes/color.dart';
-
 class Unit {
   List<String> _items = [
     'Pieces',
     'Grams',
     'Kilograms',
-    'Litre',
-    'Millilitre',
-    'Ounce',
-    'CC',
-    'Litre',
-    'Millilitre',
-    'Ounce',
-    'CC',
-    'Litre',
-    'Millilitre',
-    'Ounce',
-    'CC',
     'Litre',
     'Millilitre',
     'Ounce',

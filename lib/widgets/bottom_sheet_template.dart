@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/widgets/custom_button.dart';
@@ -8,6 +9,7 @@ class BottomSheetTemplate extends StatelessWidget {
   final Widget child;
   final Function() submitForm;
   final bool isShort;
+  final bool showQr;
 
   const BottomSheetTemplate({
     Key? key,
@@ -16,6 +18,7 @@ class BottomSheetTemplate extends StatelessWidget {
     required this.child,
     required this.submitForm,
     this.isShort = false,
+    this.showQr = false,
   }) : super(key: key);
 
   @override
@@ -38,23 +41,47 @@ class BottomSheetTemplate extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            height: 77,
+            // height: 77,
             width: double.infinity,
             margin: EdgeInsets.only(
               top: 52,
               bottom: 5,
             ),
-            child: FittedBox(
-              alignment: Alignment.topLeft,
-              child: Text(
-                title,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                  color: AppColors.white,
-                  // fontSize: 60,
-                ),
+            // child: FittedBox(
+            //   alignment: Alignment.topLeft,
+            // child: Text(
+            //   title,
+            //   textAlign: TextAlign.start,
+            //   style: TextStyle(
+            //     color: AppColors.white,
+            //     fontSize: 60,
+            //   ),
+            // ),
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: title,
+                    style: TextStyle(
+                      color: AppColors.white,
+                      fontSize: 60,
+                      fontFamily: 'BebasNeue',
+                    ),
+                  ),
+                  if (showQr)
+                    WidgetSpan(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 5),
+                        child: Icon(
+                          Icons.qr_code_scanner_rounded,
+                          size: 40,
+                        ),
+                      ),
+                    )
+                ],
               ),
             ),
+            // ),
           ),
           Expanded(
             child: SingleChildScrollView(
