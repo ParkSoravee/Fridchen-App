@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../providers/tags.dart';
+import '../../widgets/dialog_alert.dart';
 
 class FridgeNewItem extends StatefulWidget {
   final FridgeItem? item;
@@ -97,18 +98,14 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
       // widget.showSavedConfirm(_name);
     } catch (e) {
       showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-                title: Text(e.toString()),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Okay'),
-                  )
-                ],
-              ));
+        context: context,
+        builder: (ctx) => DialogAlert(
+          title: 'Please connect the internet.',
+          smallTitle: true,
+          primaryColor: AppColors.white,
+          backgroundColor: AppColors.red,
+        ),
+      );
     }
   }
 
