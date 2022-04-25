@@ -10,6 +10,8 @@ class BottomSheetTemplate extends StatelessWidget {
   final Function() submitForm;
   final bool isShort;
   final bool showQr;
+  final String confirmText;
+  final String cancelText;
 
   const BottomSheetTemplate({
     Key? key,
@@ -19,6 +21,8 @@ class BottomSheetTemplate extends StatelessWidget {
     required this.submitForm,
     this.isShort = false,
     this.showQr = false,
+    this.confirmText = 'Confirm',
+    this.cancelText = 'Cancel',
   }) : super(key: key);
 
   @override
@@ -99,7 +103,7 @@ class BottomSheetTemplate extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 CustomButton(
-                  text: 'Cancel',
+                  text: cancelText,
                   primaryColor: AppColors.darkGreen,
                   secondaryColor: background,
                   isPrimary: false,
@@ -108,7 +112,7 @@ class BottomSheetTemplate extends StatelessWidget {
                   },
                 ),
                 CustomButton(
-                  text: 'Confirm',
+                  text: confirmText,
                   primaryColor: AppColors.darkGreen,
                   secondaryColor: background,
                   isPrimary: true,

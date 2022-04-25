@@ -49,7 +49,8 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
     }
   }
 
-  void submitForm() {
+  Future<void> submitForm() async {
+    print('submit');
     isValid = _ingredients.length > 0 && _steps.length > 0;
     isValid = _form.currentState!.validate();
 
@@ -74,6 +75,10 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
         ),
       );
     }
+  }
+
+  void cook() {
+    Navigator.pop(context);
   }
 
   Future<void> addNewIngredient() async {
@@ -137,7 +142,9 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
               : 'New Recipe'
           : widget.item!.name,
       background: primaryColor,
-      submitForm: submitForm,
+      submitForm: widget.item != null && !widget.onEdit ? cook : submitForm,
+      confirmText: widget.item != null && !widget.onEdit ? 'Cook!' : 'Confirm',
+      cancelText: widget.item != null && !widget.onEdit ? 'Back' : 'Cancel',
       child: Form(
         key: _form,
         child: Column(
@@ -171,8 +178,8 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
                           return 'Please enter the name.';
                         }
 
-                        if (value.length > 25) {
-                          return 'Name can be only 1-25 characters.';
+                        if (value.length > 30) {
+                          return 'Name can be only 1-30 characters.';
                         }
 
                         // if (value.contains(special)) {
