@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/fridges.dart';
+import 'package:fridchen_app/providers/unit.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/utils/date.dart';
 import 'package:fridchen_app/widgets/bottom_sheet_template.dart';
@@ -40,27 +41,6 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
   double? _max;
   String? _selectedUnit;
   List<String> _tagsId = [];
-
-  List<DropdownMenuItem<String>> dropDownItems = [
-    'Pieces',
-    'Grams',
-    'Kilograms',
-    'Litre',
-    'Millilitre',
-    'Ounce',
-    'CC',
-  ].map<DropdownMenuItem<String>>((String value) {
-    return DropdownMenuItem<String>(
-      value: value,
-      child: Text(
-        value,
-        style: TextStyle(
-          color: AppColors.darkGreen,
-          fontSize: 20,
-        ),
-      ),
-    );
-  }).toList();
 
   Future<void> setExpDate() async {
     final date = await MyDateUtils.setExpDate(context: context, title: 'EXP');
@@ -250,75 +230,73 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
             RowWithTitle(
               title: 'VOLUME : ',
               child: [
-                Container(
-                  width: 100,
-                  child: TextFormField(
-                    controller: _volumnController,
-                    focusNode: _volumnFocusNode,
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      border: InputBorder.none,
-                      filled: true,
-                      isDense: true,
-                      contentPadding: EdgeInsets.fromLTRB(12, 6, 12, 2),
+                Expanded(
+                  child: Container(
+                    child: TextFormField(
+                      controller: _volumnController,
+                      focusNode: _volumnFocusNode,
+                      decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        border: InputBorder.none,
+                        filled: true,
+                        isDense: true,
+                        contentPadding: EdgeInsets.fromLTRB(12, 6, 12, 2),
+                      ),
+                      cursorColor: AppColors.lightGreen,
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontSize: 36,
+                      ),
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter item amount or volume.';
+                        }
+
+                        if (double.tryParse(value) == null) {
+                          return 'Invalid volume.';
+                        }
+
+                        if (double.parse(value) > 10000) {
+                          return 'Invalid volume.';
+                        }
+
+                        if (_selectedUnit == null) {
+                          return 'Invalid unit.';
+                        }
+
+                        return null;
+                      },
+                      onSaved: (value) {
+                        _volume = double.parse(value!);
+                      },
                     ),
-                    cursorColor: AppColors.lightGreen,
-                    style: TextStyle(
-                      color: AppColors.white,
-                      fontSize: 36,
-                    ),
-                    keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter item amount or volume.';
-                      }
-
-                      if (double.tryParse(value) == null) {
-                        return 'Invalid volume.';
-                      }
-
-                      if (double.parse(value) > 10000) {
-                        return 'Invalid volume.';
-                      }
-
-                      if (_selectedUnit == null) {
-                        return 'Invalid unit.';
-                      }
-
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _volume = double.parse(value!);
-                    },
                   ),
                 ),
                 SizedBox(
                   width: 10,
                 ),
-                Expanded(
-                  // margin: EdgeInsets.only(left: 10),
-                  // width: 90,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      // decoration: ,
-                      value: _selectedUnit,
-                      icon: Icon(Icons.keyboard_arrow_down_rounded),
-                      hint: Text(
-                        'Select unit',
-                        style: TextStyle(
-                          color: AppColors.white,
-                          fontSize: 20,
-                        ),
+                DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    menuMaxHeight: 220,
+                    // decoration: ,
+                    value: _selectedUnit,
+                    icon: Icon(Icons.keyboard_arrow_down_rounded),
+                    hint: Text(
+                      'Select unit',
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontSize: 20,
                       ),
-                      items: dropDownItems,
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedUnit = value.toString();
-                        });
-                      },
                     ),
+                    items: Unit().getDropdownMenuItem(20, AppColors.darkGreen),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedUnit = value.toString();
+                      });
+                    },
                   ),
                 ),
               ],
@@ -380,7 +358,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
               isAlignStart: true,
               child: [
                 TagSelect(
-                  tags: Provider.of<Tags>(context).defaultTags,
+                  tags: Provider.of<Tags>(context, listen: false).defaultTags,
                   setSelectedTags: setSelectedTags,
                   selectedTagsId: _tagsId,
                 ),
