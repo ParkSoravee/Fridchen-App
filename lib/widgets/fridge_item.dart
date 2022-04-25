@@ -30,7 +30,7 @@ class _FridgeListItemState extends State<FridgeListItem> {
           context: context, title: widget.item.name);
       if (date != null) {
         Provider.of<FridgeItems>(context, listen: false)
-            .setExp(widget.item.id, date);
+            .setExp(widget.item.id!, date);
       }
       // TODO: bottom success
     } catch (e) {
@@ -86,7 +86,7 @@ class _FridgeListItemState extends State<FridgeListItem> {
 
     try {
       await Provider.of<FridgeItems>(context, listen: false)
-          .setStar(widget.item.id);
+          .setStar(widget.item.id!);
       // TODO: bottom success
     } catch (e) {
       // TODO: bottom error
@@ -135,7 +135,7 @@ class _FridgeListItemState extends State<FridgeListItem> {
 
     try {
       Provider.of<FridgeItems>(context, listen: false)
-          .deleteItem(widget.item.id);
+          .deleteItem(widget.item.id!);
       // TODO: bottom success
     } catch (e) {
       // TODO: bottom error
@@ -159,7 +159,7 @@ class _FridgeListItemState extends State<FridgeListItem> {
 
     try {
       Provider.of<FridgeItems>(context, listen: false)
-          .consumeItem(widget.item.id, amount);
+          .consumeItem(widget.item.id!, amount);
       // TODO: bottom success
     } catch (e) {
       // TODO: bottom error

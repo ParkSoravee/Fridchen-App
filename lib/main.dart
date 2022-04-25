@@ -7,13 +7,21 @@ import 'package:fridchen_app/providers/fridges.dart';
 import 'package:fridchen_app/providers/list.dart';
 import 'package:fridchen_app/providers/recipes.dart';
 import 'package:fridchen_app/screens/home_screen.dart';
+import 'package:fridchen_app/screens/signin_screen.dart';
 import 'package:fridchen_app/socket.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'firebase_options.dart';
 
 import 'providers/tags.dart';
+import 'screens/splash_screen.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env");
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   // MySocket.initSocket();
   runApp(MyApp());
 }
@@ -52,14 +60,24 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ],
-      child: MaterialApp(
-        title: 'Fridchen',
-        theme: ThemeData(
-          primarySwatch: Colors.green,
-          fontFamily: 'BebasNeue',
+      child: Consumer<Auth>(
+        builder: (ctx, auth, _) => MaterialApp(
+          title: 'Fridchen',
+          theme: ThemeData(
+            primarySwatch: Colors.green,
+            fontFamily: 'BebasNeue',
+          ),
+          debugShowCheckedModeBanner: false,
+          home: auth.isAuth
+              ? MyHomePage()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (context, snapshot) =>
+                      snapshot.connectionState == ConnectionState.waiting
+                          ? SplashScreen()
+                          : SignInScreen(),
+                ),
         ),
-        debugShowCheckedModeBanner: false,
-        home: MyHomePage(),
       ),
     );
   }
