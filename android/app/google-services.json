@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "276108436348",
+    "project_id": "fridchen-app-58258",
+    "storage_bucket": "fridchen-app-58258.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276108436348:android:a66f8e899570022a6bbaf9",
+        "android_client_info": {
+          "package_name": "com.example.fridchen_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "276108436348-r8actim57p11mdhhhckqhhps3qmhar92.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcoL1zFn-D6F-2Dtzj2FN28ak6KOG2PO0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "276108436348-r8actim57p11mdhhhckqhhps3qmhar92.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "276108436348-ub5fmsiv738ja6qoe6876olc68buff8u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fridchenApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
