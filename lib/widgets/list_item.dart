@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/list.dart';
 import '../themes/color.dart';
+import 'dialog_alert.dart';
 
 class ListListItem extends StatefulWidget {
   final ListItem item;
@@ -20,24 +21,41 @@ class ListListItem extends StatefulWidget {
 class _ListListItemState extends State<ListListItem> {
   bool isTick = false;
 
-  void toggleTick() {
+  Future<void> toggleTick() async {
     isTick = !isTick;
-    Provider.of<ListItems>(context, listen: false).setTick(widget.item.id);
-    setState(() {});
+    // Provider.of<ListItems>(context, listen: false).setTick(widget.item.id);
+    // setState(() {});
+    try {
+      // TODO: api tick
+
+    } catch (e) {
+      print(e);
+      showDialog(
+        context: context,
+        builder: (ctx) => DialogAlert(
+          title: 'Please connect the internet.',
+          smallTitle: true,
+          primaryColor: AppColors.white,
+          backgroundColor: AppColors.red,
+        ),
+      );
+    }
   }
 
-  void deleteItem() {
+  Future<void> deleteItem() async {
+    print('delete');
     try {
-      Provider.of<ListItems>(context, listen: false).deleteItem(widget.item.id);
+      // Provider.of<ListItems>(context, listen: false).deleteItem(widget.item.id);
+      // TODO: api delete item
     } catch (e) {
       print(e);
       //TODO: show bottom error
     }
   }
 
-  Future<void> addToFridge(Function? setIsConform) async {
-    if (setIsConform == null) {
-      setIsConform = () {
+  Future<void> addToFridge(Function? setIsConfirm) async {
+    if (setIsConfirm == null) {
+      setIsConfirm = () {
         deleteItem();
       };
     }
@@ -49,7 +67,8 @@ class _ListListItemState extends State<ListListItem> {
       builder: (_) => Padding(
         padding: MediaQuery.of(context).viewInsets,
         child: FridgeNewItem(
-          setIsComfirm: setIsConform,
+          name: widget.item.name,
+          setIsComfirm: setIsConfirm,
         ), // TODO: default value
       ),
     );

@@ -17,10 +17,13 @@ import '../../widgets/dialog_alert.dart';
 class FridgeNewItem extends StatefulWidget {
   final FridgeItem? item;
   final Function? setIsComfirm;
+  final String? name;
+
   const FridgeNewItem({
     Key? key,
     this.setIsComfirm,
     this.item,
+    this.name,
   }) : super(key: key);
 
   @override
@@ -111,6 +114,10 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
 
   @override
   void initState() {
+    if (widget.name != null) {
+      _nameController.text = widget.name!;
+    }
+
     if (widget.item != null) {
       _nameController.text = widget.item!.name;
       _volumnController.text = widget.item!.countLeft.toString();
@@ -119,7 +126,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
       _tagsId = widget.item!.tags.map((e) {
         return e.id;
       }).toList();
-      print(_tagsId);
+      // print(_tagsId);
       _selectedUnit = widget.item!.unit;
       _exp = widget.item!.exp;
     }
