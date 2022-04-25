@@ -3,7 +3,7 @@ import 'package:fridchen_app/providers/tags.dart';
 import 'package:fridchen_app/themes/color.dart';
 
 class FridgeItem {
-  final String id;
+  final String? id;
   String name;
   double countLeft;
   double? min;
@@ -13,7 +13,7 @@ class FridgeItem {
   bool isStar;
 
   FridgeItem({
-    required this.id,
+    this.id,
     required this.name,
     required this.countLeft,
     required this.unit,

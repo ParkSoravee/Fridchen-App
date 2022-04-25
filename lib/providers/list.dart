@@ -4,13 +4,13 @@ import 'package:fridchen_app/providers/tags.dart';
 import '../themes/color.dart';
 
 class ListItem {
-  final String id;
+  final String? id;
   final String name;
   final List<Tag> tags;
   bool isTick;
 
   ListItem({
-    required this.id,
+    this.id,
     required this.name,
     required this.tags,
     this.isTick = false,

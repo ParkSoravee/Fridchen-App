@@ -16,7 +16,7 @@ class Ingredient {
 }
 
 class Recipe {
-  final String id;
+  final String? id;
   final String name;
   final List<Ingredient> ingredients;
   final List<String> steps;
@@ -24,7 +24,7 @@ class Recipe {
   bool isPin;
 
   Recipe({
-    required this.id,
+    this.id,
     required this.name,
     required this.ingredients,
     required this.steps,
