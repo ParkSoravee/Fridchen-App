@@ -11,6 +11,7 @@ import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/widgets/tag_list.dart';
 import 'package:provider/provider.dart';
 
+import '../screens/bottomsheets/fridge_new_item.dart';
 import 'dialog_consume.dart';
 
 class FridgeListItem extends StatefulWidget {
@@ -154,8 +155,6 @@ class _FridgeListItemState extends State<FridgeListItem> {
         },
       ),
     );
-    print(isConfirm);
-    print(amount);
     if (!isConfirm) return;
 
     try {
@@ -167,10 +166,24 @@ class _FridgeListItemState extends State<FridgeListItem> {
     }
   }
 
+  void editFridgeItem() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      barrierColor: AppColors.darkGreen.withOpacity(0.70),
+      isScrollControlled: true,
+      builder: (_) => Padding(
+        padding: MediaQuery.of(context).viewInsets,
+        child: FridgeNewItem(item: widget.item),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: consumeItem,
+      onLongPress: editFridgeItem,
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 5, horizontal: 18),
         child: Slidable(

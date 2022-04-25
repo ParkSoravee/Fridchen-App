@@ -7,10 +7,12 @@ class TagSelect extends StatefulWidget {
   final List<Tag> tags;
   final List<Tag> selectedTags = [];
   final Function setSelectedTags;
+  final List<String> selectedTagsId;
 
   TagSelect({
     required this.tags,
     required this.setSelectedTags,
+    this.selectedTagsId = const [],
   });
 
   @override
@@ -38,6 +40,7 @@ class _TagSelectState extends State<TagSelect> {
                 child: TagItem(
                   tag: tag,
                   selectTag: widget.setSelectedTags,
+                  isSelected: widget.selectedTagsId.contains(tag.id),
                 ),
               );
             }).toList(),

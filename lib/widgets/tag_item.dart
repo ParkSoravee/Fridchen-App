@@ -6,9 +6,11 @@ import '../providers/tags.dart';
 class TagItem extends StatefulWidget {
   final Tag tag;
   final Function? selectTag;
+  final bool isSelected;
 
   TagItem({
     required this.tag,
+    required this.isSelected,
     this.selectTag,
   });
 
@@ -21,6 +23,7 @@ class _TagItemState extends State<TagItem> {
   @override
   void initState() {
     isHighlight = widget.selectTag != null ? false : true;
+    isHighlight = widget.isSelected;
     super.initState();
   }
 

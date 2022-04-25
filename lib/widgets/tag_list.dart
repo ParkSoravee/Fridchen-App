@@ -22,7 +22,11 @@ class TagList extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemCount: tags.length,
         itemBuilder: (ctx, i) {
-          return TagItem(tag: tags[i], selectTag: selectTag);
+          return TagItem(
+            tag: tags[i],
+            selectTag: selectTag,
+            isSelected: false,
+          );
         },
       ),
     );

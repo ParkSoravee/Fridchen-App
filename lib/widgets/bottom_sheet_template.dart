@@ -73,7 +73,8 @@ class BottomSheetTemplate extends StatelessWidget {
               children: [
                 CustomButton(
                   text: 'Cancel',
-                  primaryColor: Colors.transparent,
+                  primaryColor: AppColors.darkGreen,
+                  secondaryColor: background,
                   isPrimary: false,
                   onPressed: () {
                     Navigator.pop(context);
@@ -81,7 +82,8 @@ class BottomSheetTemplate extends StatelessWidget {
                 ),
                 CustomButton(
                   text: 'Confirm',
-                  primaryColor: background,
+                  primaryColor: AppColors.darkGreen,
+                  secondaryColor: background,
                   isPrimary: true,
                   onPressed: submitForm,
                 ),

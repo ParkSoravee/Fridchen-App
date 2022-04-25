@@ -13,8 +13,13 @@ import 'package:uuid/uuid.dart';
 import '../../providers/tags.dart';
 
 class FridgeNewItem extends StatefulWidget {
+  final FridgeItem? item;
   final Function? setIsComfirm;
-  const FridgeNewItem({Key? key, this.setIsComfirm}) : super(key: key);
+  const FridgeNewItem({
+    Key? key,
+    this.setIsComfirm,
+    this.item,
+  }) : super(key: key);
 
   @override
   State<FridgeNewItem> createState() => _FridgeNewItemState();
@@ -23,6 +28,9 @@ class FridgeNewItem extends StatefulWidget {
 class _FridgeNewItemState extends State<FridgeNewItem> {
   final _form = GlobalKey<FormState>();
   final _volumnFocusNode = FocusNode();
+  final _nameController = TextEditingController();
+  final _volumnController = TextEditingController();
+  final _minController = TextEditingController();
 
   String? _id;
   String? _name;
@@ -73,37 +81,36 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
   }
 
   void submitForm() {
-    print('confirm');
+    // print('confirm');
     final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
     _form.currentState!.save();
-    // gen id
-    _id = Uuid().v1();
+
     // get tags
     final _tags =
         Provider.of<Tags>(context, listen: false).getTagsById(_tagsId);
 
-    print(_id);
+    // print(_id);
     print(_name);
     print(_exp.toString());
     print(_volume);
     print(_selectedUnit);
     print(_min);
-    print(_max);
     print(_tagsId.toString());
 
-    final fridgeItem = FridgeItem(
-      id: _id!,
-      name: _name!,
-      exp: _exp,
-      countLeft: _volume!,
-      unit: _selectedUnit!,
-      tags: _tags,
-    );
+    // final fridgeItem = FridgeItem(
+    //   // TODO : delete id here
+    //   name: _name!,
+    //   exp: _exp,
+    //   countLeft: _volume!,
+    //   unit: _selectedUnit!,
+    //   tags: _tags,
+    // );
     try {
-      Provider.of<FridgeItems>(context, listen: false).addNewItem(fridgeItem);
+      // TODO API: new or edit
+      // Provider.of<FridgeItems>(context, listen: false).addNewItem(fridgeItem);
       if (widget.setIsComfirm != null) widget.setIsComfirm!();
       Navigator.pop(context);
       // TODO vvv
@@ -126,10 +133,27 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
   }
 
   @override
+  void initState() {
+    if (widget.item != null) {
+      _nameController.text = widget.item!.name;
+      _volumnController.text = widget.item!.countLeft.toString();
+      _minController.text =
+          widget.item == null ? '' : widget.item!.min.toString();
+      _tagsId = widget.item!.tags.map((e) {
+        return e.id;
+      }).toList();
+      print(_tagsId);
+      _selectedUnit = widget.item!.unit;
+      _exp = widget.item!.exp;
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BottomSheetTemplate(
       background: AppColors.green,
-      title: 'Add in fridge',
+      title: widget.item == null ? 'Add in fridge' : 'Edit Fridge',
       submitForm: submitForm,
       child: Form(
         key: _form,
@@ -140,6 +164,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
               child: [
                 Expanded(
                   child: TextFormField(
+                    controller: _nameController,
                     decoration: InputDecoration(
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       border: InputBorder.none,
@@ -228,6 +253,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                 Container(
                   width: 100,
                   child: TextFormField(
+                    controller: _volumnController,
                     focusNode: _volumnFocusNode,
                     decoration: InputDecoration(
                       floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -303,6 +329,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                 Container(
                   width: 100,
                   child: TextFormField(
+                    controller: _minController,
                     decoration: InputDecoration(
                       floatingLabelBehavior: FloatingLabelBehavior.never,
                       border: InputBorder.none,
@@ -321,29 +348,32 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                 ),
               ],
             ),
-            RowWithTitle(
-              title: 'MAX : ',
-              child: [
-                Container(
-                  width: 100,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      border: InputBorder.none,
-                      filled: true,
-                      isDense: true,
-                      contentPadding: EdgeInsets.fromLTRB(12, 6, 12, 2),
-                    ),
-                    cursorColor: AppColors.lightGreen,
-                    style: TextStyle(
-                      color: AppColors.white,
-                      fontSize: 36,
-                    ),
-                    keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
-                  ),
-                ),
-              ],
+            // RowWithTitle(
+            //   title: 'MAX : ',
+            //   child: [
+            //     Container(
+            //       width: 100,
+            //       child: TextFormField(
+            //         decoration: InputDecoration(
+            //           floatingLabelBehavior: FloatingLabelBehavior.never,
+            //           border: InputBorder.none,
+            //           filled: true,
+            //           isDense: true,
+            //           contentPadding: EdgeInsets.fromLTRB(12, 6, 12, 2),
+            //         ),
+            //         cursorColor: AppColors.lightGreen,
+            //         style: TextStyle(
+            //           color: AppColors.white,
+            //           fontSize: 36,
+            //         ),
+            //         keyboardType:
+            //             TextInputType.numberWithOptions(decimal: true),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            SizedBox(
+              height: 10,
             ),
             RowWithTitle(
               title: 'TAG : ',
@@ -352,6 +382,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                 TagSelect(
                   tags: Provider.of<Tags>(context).defaultTags,
                   setSelectedTags: setSelectedTags,
+                  selectedTagsId: _tagsId,
                 ),
               ],
             ),
