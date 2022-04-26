@@ -6,6 +6,7 @@ import 'package:fridchen_app/providers/family.dart';
 import 'package:fridchen_app/providers/fridges.dart';
 import 'package:fridchen_app/providers/list.dart';
 import 'package:fridchen_app/providers/recipes.dart';
+import 'package:fridchen_app/screens/fetch_family_screen.dart';
 import 'package:fridchen_app/screens/home_screen.dart';
 import 'package:fridchen_app/screens/signin_screen.dart';
 import 'package:fridchen_app/socket.dart';
@@ -32,9 +33,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => Families(),
-        ),
-        ChangeNotifierProvider(
           create: (ctx) => FridgeItems(),
         ),
         ChangeNotifierProvider(
@@ -51,16 +49,23 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProxyProvider<Auth, Api>(
           update: (ctx, auth, pre) => Api(
-            auth.userId,
-            auth.token,
+            userId: auth.userId,
+            authToken: auth.token,
           ),
           create: (_) => Api(
-            Provider.of<Auth>(context, listen: false).userId,
-            Provider.of<Auth>(context, listen: false).token,
+            userId: Provider.of<Auth>(context, listen: false).userId,
+            authToken: Provider.of<Auth>(context, listen: false).token,
           ),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => Families(),
+        ),
+        // ChangeNotifierProxyProvider<Api, Families>(
+        //   update: (ctx, api, pre) => Families(api),
+        //   create: (_) => Families(null),
+        // ),
       ],
-      child: Consumer<Auth>(
+      builder: (context, _) => Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
           title: 'Fridchen',
           theme: ThemeData(
@@ -69,7 +74,7 @@ class MyApp extends StatelessWidget {
           ),
           debugShowCheckedModeBanner: false,
           home: auth.isAuth
-              ? MyHomePage()
+              ? FetchFamilyScreen(auth.userId!)
               : FutureBuilder(
                   future: auth.tryAutoLogin(),
                   builder: (context, snapshot) =>

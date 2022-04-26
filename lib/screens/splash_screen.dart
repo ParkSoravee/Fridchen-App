@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fridchen_app/themes/color.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -6,8 +7,11 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.darkGreen,
       body: Center(
-        child: CircularProgressIndicator(),
+        child: CircularProgressIndicator(
+          color: AppColors.yellow,
+        ),
       ),
     );
   }
