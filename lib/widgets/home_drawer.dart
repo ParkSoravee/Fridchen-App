@@ -41,9 +41,11 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     CircleAvatar(
                       radius: 45,
                       backgroundColor: AppColors.darkGreen,
-                      backgroundImage: NetworkImage(
-                        user.img!,
-                      ),
+                      backgroundImage: user.img == null
+                          ? null
+                          : NetworkImage(
+                              user.img!,
+                            ),
                     ),
                     SizedBox(
                       height: 8,
@@ -51,8 +53,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
                     Container(
                       width: double.infinity,
                       child: Text(
-                        // user.name ?? 'USER',
-                        'Park Soravee',
+                        user.name ?? 'USER',
+                        // 'Park Soravee',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: AppColors.yellow, fontSize: 24),
                       ),

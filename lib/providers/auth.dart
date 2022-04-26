@@ -83,6 +83,8 @@ class Auth with ChangeNotifier {
 
       if (extractedUserData['userId'] == null) return;
       _userId = extractedUserData['userId']!;
+      _userName = extractedUserData['userName']!;
+      _userImg = extractedUserData['userImg']!;
 
       print('success auto login');
       notifyListeners();
@@ -95,8 +97,7 @@ class Auth with ChangeNotifier {
     _userId = null;
     _userName = null;
     _userImg = null;
-    // await FirebaseAuth.instance.signOut();
-    // await GoogleSignIn().signOut();
+    await GoogleSignIn().signOut();
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
