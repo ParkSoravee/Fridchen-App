@@ -30,17 +30,17 @@ class _FetchFamilyScreenState extends State<FetchFamilyScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer<Families>(
-        builder: (context, family, _) => family.hasFamily
-            ? MyHomePage(familyIds, widget.userId)
-            : FutureBuilder(
-                future: fetchAndSetFamily(),
-                builder: (context, snapshot) =>
-                    snapshot.connectionState == ConnectionState.waiting
-                        ? SplashScreen()
-                        : familyIds.isEmpty
-                            ? NewFridchenScreen(widget.userId)
-                            : MyHomePage(familyIds, widget.userId),
-              ),
+        builder: (context, family, _) => FutureBuilder(
+          future: fetchAndSetFamily(),
+          builder: (context, snapshot) =>
+              snapshot.connectionState == ConnectionState.waiting
+                  ? SplashScreen()
+                  : family.hasFamily
+                      ? MyHomePage(familyIds, widget.userId)
+                      : familyIds.isEmpty
+                          ? NewFridchenScreen(widget.userId)
+                          : MyHomePage(familyIds, widget.userId),
+        ),
       ),
     );
   }
@@ -75,7 +75,7 @@ class _NewFridchenScreenState extends State<NewFridchenScreen> {
 
     try {
       Provider.of<Families>(context, listen: false)
-          .newFamily(widget.userId, fridchenName);
+          .newFamily(widget.userId, fridchenName, first: true);
       // TODO call bottom success
     } catch (e) {
       print(e);

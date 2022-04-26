@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fridchen_app/providers/family.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth.dart';
@@ -18,6 +19,11 @@ class _HomeDrawerState extends State<HomeDrawer> {
 
   Future<void> logout() async {
     await Provider.of<Auth>(context, listen: false).logout();
+  }
+
+  Future<void> leaveFamily() async {
+    final userId = Provider.of<Auth>(context, listen: false).userId!;
+    await Provider.of<Families>(context, listen: false).leaveFamily(userId);
   }
 
   @override
@@ -126,7 +132,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           fontFamily: "BebasNeue",
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: leaveFamily,
                     ),
                   ],
                 ),

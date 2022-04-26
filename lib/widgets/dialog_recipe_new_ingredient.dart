@@ -160,7 +160,7 @@ class _DialogRecipeNewIngredientState extends State<DialogRecipeNewIngredient> {
                       ),
                     ),
                     dropdownColor: AppColors.orange,
-                    items: Unit().getDropdownMenuItem(30, AppColors.white),
+                    items: Units().getDropdownMenuItem(30, AppColors.white),
                     onChanged: (value) {
                       setState(() {
                         _selectedUnit = value.toString();

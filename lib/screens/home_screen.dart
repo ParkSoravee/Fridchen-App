@@ -54,6 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
       await Provider.of<Families>(context, listen: false)
           .fetchAndSetFamily(widget.userId);
       _index += 1;
+      Provider.of<Families>(context, listen: false).setCurrentFamily(_index);
       await getAllData();
       // TODO call bottom success
     } catch (e) {
@@ -67,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> changeFamily(int index) async {
     _index = index;
+    Provider.of<Families>(context, listen: false).setCurrentFamily(_index);
     await getAllData();
   }
 
@@ -76,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _isLoading = true;
     });
     _familyIds = Provider.of<Families>(context, listen: false).families;
+    _index = Provider.of<Families>(context, listen: false).currentFamilyIndex;
     print(_familyIds[_index]);
     final url = Uri.parse(
       '$api_url/all/${_familyIds[_index]}',
@@ -85,10 +88,18 @@ class _MyHomePageState extends State<MyHomePage> {
       final res = await http.get(
         url,
       );
+
       final extractedData = json.decode(res.body) as Map<String, dynamic>;
-      print('data:');
-      print(extractedData['data']);
-      // TODO: set every thing
+      print('data:' + extractedData['data'].toString());
+      // TODO: Here
+      // * set every thing
+      // set fridge item
+
+      // set recipe
+
+      // set shopping list
+
+      // * ------------------
       _familyName = extractedData['data']['family_name'];
       setState(() {
         _isLoading = false;
@@ -240,18 +251,20 @@ class FamilySelect extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Spacer(),
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                    padding: EdgeInsets.only(
-                      bottom: 4,
-                    ),
-                    splashRadius: 35,
-                    iconSize: 45,
-                    color: AppColors.darkGreen,
-                    onPressed: () {
-                      _changeFamily(-1);
-                    },
-                  ),
+                  currentIndex > 0
+                      ? IconButton(
+                          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                          padding: EdgeInsets.only(
+                            bottom: 4,
+                          ),
+                          splashRadius: 35,
+                          iconSize: 45,
+                          color: AppColors.darkGreen,
+                          onPressed: () {
+                            _changeFamily(-1);
+                          },
+                        )
+                      : SizedBox(width: 45),
                   SizedBox(
                     width: 15,
                   ),

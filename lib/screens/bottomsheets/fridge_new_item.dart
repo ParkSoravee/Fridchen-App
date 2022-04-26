@@ -295,7 +295,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                         fontSize: 20,
                       ),
                     ),
-                    items: Unit().getDropdownMenuItem(20, AppColors.darkGreen),
+                    items: Units().getDropdownMenuItem(20, AppColors.darkGreen),
                     onChanged: (value) {
                       setState(() {
                         _selectedUnit = value.toString();

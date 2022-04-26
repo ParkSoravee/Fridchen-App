@@ -5,7 +5,8 @@ import 'package:fridchen_app/screens/template_screen.dart';
 import 'package:fridchen_app/themes/color.dart';
 
 class AddMemberScreen extends StatefulWidget {
-  const AddMemberScreen({Key? key}) : super(key: key);
+  final String familyId;
+  const AddMemberScreen(this.familyId);
 
   @override
   State<AddMemberScreen> createState() => _AddMemberScreenState();

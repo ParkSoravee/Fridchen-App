@@ -13,52 +13,56 @@ class Api with ChangeNotifier {
   final String? authToken;
   final api_url = dotenv.env['BACKEND_URL'];
 
-  Api(this.userId, this.authToken);
+  Api({this.userId, this.authToken});
 
   // * Fridchen/Family
-  Future<String> addNewFridchen(
-    Family item,
-  ) async {
-    final url = Uri.parse(
-      '$api_url/family?userid=$userId',
-    );
-    try {
-      final res = await http.post(
-        url,
-        body: json.encode({
-          'name': item.name,
-        }),
-      );
-      final extractedData = json.decode(res.body) as Map<String, dynamic>;
+  // Future<Map<String, dynamic>> getFamilyData(String familyId) async {
 
-      return extractedData['id'];
-    } catch (e) {
-      print(e);
-      throw e;
-    }
-  }
+  // }
 
-  Future<String> joinFridchen(
-    Family item,
-  ) async {
-    final url = Uri.parse(
-      '$api_url/family/join?userid=$userId',
-    );
-    try {
-      final res = await http.post(
-        url,
-        body: json.encode({
-          'id': item.id,
-        }),
-      );
-      final extractedData = json.decode(res.body) as Map<String, dynamic>;
+  // Future<String> addNewFridchen(
+  //   Family item,
+  // ) async {
+  //   final url = Uri.parse(
+  //     '$api_url/family?userid=$userId',
+  //   );
+  //   try {
+  //     final res = await http.post(
+  //       url,
+  //       body: json.encode({
+  //         'name': item.name,
+  //       }),
+  //     );
+  //     final extractedData = json.decode(res.body) as Map<String, dynamic>;
 
-      return extractedData['id'];
-    } catch (e) {
-      print(e);
-      throw e;
-    }
-  }
+  //     return extractedData['id'];
+  //   } catch (e) {
+  //     print(e);
+  //     throw e;
+  //   }
+  // }
+
+  // Future<String> joinFridchen(
+  //   Family item,
+  // ) async {
+  //   final url = Uri.parse(
+  //     '$api_url/family/join?userid=$userId',
+  //   );
+  //   try {
+  //     final res = await http.post(
+  //       url,
+  //       body: json.encode({
+  //         'id': item.id,
+  //       }),
+  //     );
+  //     final extractedData = json.decode(res.body) as Map<String, dynamic>;
+
+  //     return extractedData['id'];
+  //   } catch (e) {
+  //     print(e);
+  //     throw e;
+  //   }
+  // }
 
   // * Fridge
   Future<void> addFridgeItem(
