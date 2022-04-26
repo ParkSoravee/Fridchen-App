@@ -23,6 +23,14 @@ class Auth with ChangeNotifier {
     return _token;
   }
 
+  String? get name {
+    return _userName;
+  }
+
+  String? get img {
+    return _userImg;
+  }
+
   Future<void> signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -47,6 +55,10 @@ class Auth with ChangeNotifier {
     _userName = user!.displayName!;
     _userId = user.uid;
     _userImg = user.photoURL!;
+
+    print(_userName);
+    print(_userId);
+    print(_userImg);
 
     final prefs = await SharedPreferences.getInstance();
     final userData = json.encode({
@@ -80,9 +92,11 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> logout() async {
-    _userId = '';
+    _userId = null;
+    _userName = null;
+    _userImg = null;
     // await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().disconnect();
+    // await GoogleSignIn().signOut();
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();

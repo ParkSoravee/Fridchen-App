@@ -12,7 +12,7 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   Future<void> signin() async {
-    Provider.of<Auth>(context).signInWithGoogle();
+    Provider.of<Auth>(context, listen: false).signInWithGoogle();
   }
 
   @override
@@ -21,7 +21,10 @@ class _SignInScreenState extends State<SignInScreen> {
       body: Center(
         child: ElevatedButton(
           child: Text('signin'),
-          onPressed: () async {},
+          onPressed: () async {
+            await signin();
+            print('signing in');
+          },
         ),
       ),
     );

@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/auth.dart';
 import '../screens/qrcode/join_family_screen.dart';
 import '../themes/color.dart';
 
@@ -13,161 +16,183 @@ class HomeDrawer extends StatefulWidget {
 class _HomeDrawerState extends State<HomeDrawer> {
   bool _lights = false;
 
+  Future<void> logout() async {
+    await Provider.of<Auth>(context, listen: false).logout();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<Auth>(context, listen: false);
     return Container(
       width: MediaQuery.of(context).size.width * 0.5,
       child: Drawer(
-        child: ListView(
-          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          children: [
-            Container(
-              margin: EdgeInsets.all(15),
-              width: 100.0,
-              height: 100.0,
-              decoration: new BoxDecoration(
-                color: Colors.black,
-                shape: BoxShape.circle,
-              ),
-            ),
-            Center(
-              child: Text(
-                'USER',
-                style: TextStyle(color: AppColors.yellow, fontSize: 26),
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Center(
-                child: TextButton(
-              child: Text(
-                'HOME',
-                style: TextStyle(color: Colors.white, fontSize: 36),
-              ),
-              onPressed: () {},
-            )),
-            SizedBox(
-              height: 40,
-            ),
-            Stack(children: [
-              Center(
-                child: Text(
-                  'FAMILY',
-                  style: TextStyle(
-                    color: AppColors.darkGreen,
-                    fontSize: 36,
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 8,
-                left: 27,
-                child: Container(
-                  height: 4,
-                  width: 140,
-                  color: AppColors.darkGreen,
-                ),
-              ),
-            ]),
-            Center(
-                child: TextButton(
-              child: Text(
-                'NEW',
-                style: TextStyle(color: Colors.white, fontSize: 26),
-              ),
-              onPressed: () {},
-            )),
-            Center(
-                child: TextButton(
-              child: Text(
-                'JOIN',
-                style: TextStyle(color: Colors.white, fontSize: 26),
-              ),
-              onPressed: () {},
-            )),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: Container(
-                height: 43,
-                width: 140,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 3,
-                      color: AppColors.darkGreen,
+        child: Container(
+          padding: EdgeInsets.only(
+            top: MediaQuery.of(context).padding.top + 20,
+            left: 20,
+            right: 20,
+            bottom: MediaQuery.of(context).padding.bottom + 20,
+          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 45,
+                      backgroundColor: AppColors.darkGreen,
+                      backgroundImage: NetworkImage(
+                        user.img!,
+                      ),
                     ),
-                    color: AppColors.green,
-                    borderRadius: BorderRadius.circular(25)),
-                child: TextButton(
-                  child: Text(
-                    'LEAVE FAMILY',
-                    style: TextStyle(
-                        fontSize: 20,
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      child: Text(
+                        // user.name ?? 'USER',
+                        'Park Soravee',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: AppColors.yellow, fontSize: 24),
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'HOME',
+                          style: TextStyle(color: Colors.white, fontSize: 36),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  children: [
+                    Text(
+                      'Fridchen',
+                      style: TextStyle(
                         color: AppColors.darkGreen,
-                        fontFamily: "BebasNeue"),
-                  ),
-                  onPressed: () {},
-                ),
-              ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Center(
-              child: Container(
-                height: 4,
-                width: 140,
-                color: AppColors.darkGreen,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: SwitchListTile(
-                title: const Text(
-                  'DARK MODE',
-                  style: TextStyle(
-                      fontSize: 22,
+                        fontSize: 36,
+                      ),
+                    ),
+                    Divider(
                       color: AppColors.darkGreen,
-                      fontFamily: "BebasNeue"),
+                      height: 0,
+                      thickness: 3,
+                    ),
+                    TextButton(
+                      child: Text(
+                        'JOIN',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 26,
+                        ),
+                      ),
+                      onPressed: () {},
+                    ),
+                    TextButton(
+                      child: Text(
+                        'NEW',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 26,
+                        ),
+                      ),
+                      onPressed: () {},
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        side: BorderSide(
+                          color: AppColors.darkGreen,
+                          width: 3,
+                        ),
+                      ),
+                      child: Text(
+                        'LEAVE FAMILY',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: AppColors.darkGreen,
+                          fontFamily: "BebasNeue",
+                        ),
+                      ),
+                      onPressed: () {},
+                    ),
+                  ],
                 ),
-                value: _lights,
-                activeColor: Colors.white,
-                activeTrackColor: AppColors.darkGreen,
-                inactiveThumbColor: AppColors.darkGreen,
-                inactiveTrackColor: Colors.white,
-                onChanged: (bool value) {
-                  setState(() {
-                    _lights = value;
-                  });
-                },
               ),
-            ),
-            SizedBox(
-              height: 100,
-            ),
-            Center(
-              child: Container(
-                height: 30,
-                width: 120,
-                decoration: BoxDecoration(
-                    color: AppColors.darkGreen,
-                    borderRadius: BorderRadius.circular(20)),
-                child: TextButton(
-                  child: Text(
-                    'LOG OUT',
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: AppColors.green,
-                        //fontWeight: FontWeight.bold,
-                        fontFamily: "BebasNeue"),
-                  ),
-                  onPressed: () {},
+              Expanded(
+                child: Column(
+                  children: [
+                    Divider(
+                      color: AppColors.darkGreen,
+                      height: 10,
+                      thickness: 3,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: FittedBox(
+                            child: Text(
+                              'DARK MODE',
+                              style: TextStyle(
+                                // fontSize: 20,
+                                color: AppColors.darkGreen,
+                                fontFamily: "BebasNeue",
+                              ),
+                            ),
+                          ),
+                        ),
+                        Transform.scale(
+                          scale: 0.8,
+                          child: CupertinoSwitch(
+                            value: _lights,
+                            activeColor: Colors.white,
+                            // activeTrackColor: AppColors.darkGreen,
+                            // inactiveThumbColor: AppColors.darkGreen,
+                            // inactiveTrackColor: Colors.white,
+                            thumbColor: AppColors.darkGreen,
+                            trackColor: AppColors.white,
+                            onChanged: (bool value) {
+                              setState(() {
+                                _lights = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    OutlinedButton(
+                      child: Text(
+                        'LOG OUT',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: AppColors.green,
+                          fontFamily: "BebasNeue",
+                        ),
+                      ),
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: AppColors.darkGreen,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      onPressed: logout,
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
