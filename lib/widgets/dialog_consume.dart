@@ -103,7 +103,7 @@ class _DialogConsumeState extends State<DialogConsume> {
                 width: 10,
               ),
               Text(
-                widget.item.unit,
+                widget.item.unit.name,
                 style: TextStyle(
                   color: AppColors.darkGreen,
                   fontSize: 25,

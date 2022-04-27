@@ -127,7 +127,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
         return e.id;
       }).toList();
       // print(_tagsId);
-      _selectedUnit = widget.item!.unit;
+      _selectedUnit = widget.item!.unit.name;
       _exp = widget.item!.exp;
     }
     super.initState();
