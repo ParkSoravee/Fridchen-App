@@ -31,7 +31,12 @@ class _FridgeListItemState extends State<FridgeListItem> {
   Future<void> setExpDate() async {
     try {
       final date = await MyDateUtils.setExpDate(
-          context: context, title: widget.item.name);
+        context: context,
+        title: widget.item.name,
+        initDate: widget.item.exp == null
+            ? DateTime.now().add(Duration(days: 2))
+            : widget.item.exp!,
+      );
       if (date != null) {
         final familyId =
             Provider.of<Families>(context, listen: false).currentFamilyId;

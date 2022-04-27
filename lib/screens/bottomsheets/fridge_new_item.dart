@@ -50,7 +50,15 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
   List<String> _tagsId = [];
 
   Future<void> setExpDate() async {
-    final date = await MyDateUtils.setExpDate(context: context, title: 'EXP');
+    final date = await MyDateUtils.setExpDate(
+      context: context,
+      title: 'EXP',
+      initDate: widget.item == null
+          ? DateTime.now().add(Duration(days: 2))
+          : widget.item!.exp == null
+              ? DateTime.now().add(Duration(days: 2))
+              : widget.item!.exp!,
+    );
     if (date != null) {
       _exp = date;
       setState(() {});
@@ -86,7 +94,8 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
       name: _name!,
       exp: _exp,
       countLeft: _volume!,
-      unitIds: _selectedUnit!,
+      unitIds: Provider.of<Units>(context, listen: false)
+          .getIdByName(_selectedUnit!),
       tagIds: _tagsId,
       min: _min,
     );
@@ -98,7 +107,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
             .addFridgeItem(familyId, fridgeItem);
       } else {
         await Provider.of<Api>(context, listen: false)
-            .editFridgeItem(familyId, fridgeItem);
+            .editFridgeItem(familyId, fridgeItem, widget.item!.id!);
       }
       if (widget.setIsComfirm != null) widget.setIsComfirm!();
       Navigator.pop(context);
@@ -169,8 +178,8 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                     ),
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (_) async {
-                      FocusScope.of(context).requestFocus(_volumnFocusNode);
-                      await setExpDate();
+                      // FocusScope.of(context).requestFocus(_volumnFocusNode);
+                      // await setExpDate();
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -269,7 +278,8 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                           return 'Invalid volume.';
                         }
 
-                        if (double.parse(value) > 10000) {
+                        if (double.parse(value) > 10000 ||
+                            double.parse(value) <= 0) {
                           return 'Invalid volume.';
                         }
 
@@ -333,34 +343,31 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                     ),
                     keyboardType:
                         TextInputType.numberWithOptions(decimal: true),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter min.';
+                      }
+
+                      if (double.tryParse(value) == null) {
+                        return 'Invalid min.';
+                      }
+
+                      if (double.parse(value) > 10000 ||
+                              double.parse(value) <= 0
+                          // || double.parse(value) >= _volume!
+                          ) {
+                        return 'Invalid min.';
+                      }
+
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _min = double.parse(value!);
+                    },
                   ),
                 ),
               ],
             ),
-            // RowWithTitle(
-            //   title: 'MAX : ',
-            //   child: [
-            //     Container(
-            //       width: 100,
-            //       child: TextFormField(
-            //         decoration: InputDecoration(
-            //           floatingLabelBehavior: FloatingLabelBehavior.never,
-            //           border: InputBorder.none,
-            //           filled: true,
-            //           isDense: true,
-            //           contentPadding: EdgeInsets.fromLTRB(12, 6, 12, 2),
-            //         ),
-            //         cursorColor: AppColors.lightGreen,
-            //         style: TextStyle(
-            //           color: AppColors.white,
-            //           fontSize: 36,
-            //         ),
-            //         keyboardType:
-            //             TextInputType.numberWithOptions(decimal: true),
-            //       ),
-            //     ),
-            //   ],
-            // ),
             SizedBox(
               height: 10,
             ),

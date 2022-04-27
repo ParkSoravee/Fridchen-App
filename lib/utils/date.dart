@@ -6,10 +6,11 @@ class MyDateUtils {
   static Future<DateTime?> setExpDate({
     required BuildContext context,
     required String title,
+    required DateTime initDate,
   }) async {
     final date = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: initDate,
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(
         Duration(days: 2000),

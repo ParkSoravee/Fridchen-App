@@ -82,11 +82,11 @@ class Api with ChangeNotifier {
         body: json.encode({
           'family_id': familyId,
           'name': item.name,
-          'count': item.countLeft,
+          'cout_left': item.countLeft,
           'unit_id': item.unitIds,
           'min': item.min ?? 0,
           'exp': item.exp == null ? null : item.exp!.toIso8601String(),
-          'tags': item.tagIds,
+          'tag_id': item.tagIds,
         }),
       );
     } catch (e) {
@@ -99,10 +99,11 @@ class Api with ChangeNotifier {
     // TODO: smart
     String familyId,
     FridgeItem item,
+    String itemId,
   ) async {
     print('editing fridge item...');
     final url = Uri.parse(
-      '$api_url/fridge_item/edit/family_id/$familyId/ingredient_id/${item.id}',
+      '$api_url/fridge_item/edit/family_id/$familyId/ingredient_id/$itemId',
     );
     try {
       final res = await http.patch(
@@ -344,13 +345,12 @@ class Api with ChangeNotifier {
   }
 
   Future<void> cookRecipeItem(
-    // TODO: smart
     String familyId,
     Recipe item,
   ) async {
     print('cooking recipe');
     final url = Uri.parse(
-      '$api_url/menu/set_is_pin',
+      '$api_url/menu/cook',
     );
     try {
       final res = await http.post(
@@ -361,7 +361,6 @@ class Api with ChangeNotifier {
         body: json.encode({
           "family_id": familyId,
           "menu_id": item.id,
-          "is_pin": !item.isPin,
         }),
       );
     } catch (e) {
