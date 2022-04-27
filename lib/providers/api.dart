@@ -117,7 +117,7 @@ class Api with ChangeNotifier {
           'unit_id': item.unitIds,
           'min': item.min ?? 0,
           'exp': item.exp == null ? null : item.exp!.toIso8601String(),
-          'tags': item.tagIds,
+          'tag_id': item.tagIds,
           // 'is_star' : item.isStar,
         }),
       );
@@ -192,11 +192,9 @@ class Api with ChangeNotifier {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: json.encode({
-          {
-            "family_id": familyId,
-            "ingredient_id": item.id,
-            "is_star": !item.isStar,
-          }
+          "family_id": familyId,
+          "ingredient_id": item.id,
+          "is_star": !item.isStar,
         }),
       );
     } catch (e) {
@@ -386,7 +384,7 @@ class Api with ChangeNotifier {
         },
         body: json.encode({
           'name': item.name,
-          'tag_ids': item.tagIds,
+          'tag_id': item.tagIds,
           'family_id': familyId,
         }),
       );

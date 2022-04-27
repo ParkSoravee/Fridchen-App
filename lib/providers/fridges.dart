@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fridchen_app/providers/tags.dart';
 import 'package:fridchen_app/providers/unit.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class FridgeItem {
   final String? id;
@@ -80,6 +84,10 @@ class FridgeItems with ChangeNotifier {
     // ),
   ];
 
+  void get test {
+    print('hureyyy!!');
+  }
+
   List<FridgeItem> get items {
     // sort by EXP date (and pick isStar to first)
     final items = [..._items];
@@ -119,19 +127,31 @@ class FridgeItems with ChangeNotifier {
     return [...searchItems];
   }
 
+  Future<void> fetchAndSetItem(String familyId) async {
+    try {
+      final api_url = dotenv.env['BACKEND_URL'];
+      final url = Uri.parse(
+        '$api_url/fridge_item/all/$familyId',
+      );
+      final res = await http.get(
+        url,
+      );
+
+      final extractedData = json.decode(res.body) as Map<String, dynamic>;
+      print(extractedData['data']);
+      final fridgeItems =
+          List<Map<String, dynamic>>.from(extractedData['data']);
+
+      setItem(fridgeItems);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void setItem(List<Map<String, dynamic>> items) {
     try {
+      print('setting fridge items...');
       _items = items.map((item) {
-        // print(item['ingredient_id'].runtimeType);
-        // print(item['ingredient_name']);
-        // print('min: ${item['min'].runtimeType}');
-        // print('count: ${item['cout_left'].runtimeType}');
-        // print('${item['unit_id'].runtimeType}');
-        // print('${item['unit_name'].runtimeType}');
-        // print('${item['is_star'].runtimeType}');
-        // print('------');
-        // return FridgeItem(
-        //     name: 'test', countLeft: 0, unit: Unit(id: '123', name: 'test'));
         return FridgeItem(
           id: item['ingredient_id'],
           name: item['ingredient_name'],
@@ -150,6 +170,7 @@ class FridgeItems with ChangeNotifier {
         );
       }).toList();
       print('success!!');
+      notifyListeners();
       // final newItem = ;
     } catch (e) {
       print('e: $e');

@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:fridchen_app/providers/tags.dart';
 
 class ListItem {
@@ -46,8 +51,29 @@ class ListItems with ChangeNotifier {
     return [..._items];
   }
 
+  Future<void> fetchAndSetItem(String familyId) async {
+    try {
+      final api_url = dotenv.env['BACKEND_URL'];
+      final url = Uri.parse(
+        '$api_url/shopping_list/all/$familyId',
+      );
+      final res = await http.get(
+        url,
+      );
+
+      final extractedData = json.decode(res.body) as Map<String, dynamic>;
+      print(extractedData['data']);
+      final listItems = List<Map<String, dynamic>>.from(extractedData['data']);
+
+      setListItem(listItems);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void setListItem(List<Map<String, dynamic>> items) {
     try {
+      print('setting lists...');
       _items = items.map((item) {
         return ListItem(
           id: item['ingredient_id'],
@@ -58,6 +84,7 @@ class ListItems with ChangeNotifier {
         );
       }).toList();
       print('success!!');
+      notifyListeners();
     } catch (e) {
       print('e: $e');
     }

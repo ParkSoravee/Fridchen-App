@@ -24,7 +24,7 @@ Future main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // MySocket.initSocket();
+  // MySocket.initSocket(context);
   runApp(MyApp());
 }
 

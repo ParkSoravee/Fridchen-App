@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/api.dart';
 import 'package:fridchen_app/providers/family.dart';
 import 'package:fridchen_app/screens/home_screen.dart';
+import 'package:fridchen_app/screens/qrcode/join_family_screen.dart';
 import 'package:fridchen_app/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../socket.dart';
 import '../themes/color.dart';
 import '../widgets/dialog_confirm.dart';
 import '../widgets/row_with_title.dart';
@@ -35,11 +37,16 @@ class _FetchFamilyScreenState extends State<FetchFamilyScreen> {
           builder: (context, snapshot) =>
               snapshot.connectionState == ConnectionState.waiting
                   ? SplashScreen()
-                  : family.hasFamily
-                      ? MyHomePage(familyIds, widget.userId)
-                      : familyIds.isEmpty
-                          ? NewFridchenScreen(widget.userId)
-                          : MyHomePage(familyIds, widget.userId),
+                  : familyIds.isNotEmpty
+                      ? FutureBuilder(
+                          future: MySocket.initSocket(context),
+                          builder: (ctx, snap) =>
+                              MyHomePage(familyIds, widget.userId))
+                      : NewFridchenScreen(widget.userId),
+          // ? MyHomePage(familyIds, widget.userId)
+          // : familyIds.isEmpty
+          //     ? NewFridchenScreen(widget.userId)
+          //     : MyHomePage(familyIds, widget.userId),
         ),
       ),
     );
@@ -59,14 +66,26 @@ class _NewFridchenScreenState extends State<NewFridchenScreen> {
   final _form = GlobalKey<FormFieldState>();
   String fridchenName = '';
 
-  Future<void> joinFridchen() async {
-    //
+  void callQrJoin() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => JoinFamilyScreen(joinFamily),
+      ),
+    );
   }
 
-  // Future<void> newFridchen() async {
-  //   Provider.of<Families>(context, listen: false)
-  //       .newFamily(widget.userId, name);
-  // }
+  Future<void> joinFamily(String familyId) async {
+    try {
+      await Provider.of<Families>(context, listen: false)
+          .joinFamily(widget.userId, familyId);
+
+      // TODO call bottom success
+    } catch (e) {
+      print(e);
+      // TODO call bottom error
+    }
+  }
 
   Future<void> addNewFridchen() async {
     final isValid = _form.currentState!.validate();
@@ -145,6 +164,7 @@ class _NewFridchenScreenState extends State<NewFridchenScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.darkGreen,
       body: Stack(
         children: [
@@ -179,7 +199,8 @@ class _NewFridchenScreenState extends State<NewFridchenScreen> {
                     ),
                   ),
                   onPressed: () async {
-                    print('join');
+                    print('joining...');
+                    callQrJoin();
                   },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: AppColors.darkGreen,

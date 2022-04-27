@@ -122,6 +122,7 @@ class Families with ChangeNotifier {
       // print(extractedData);
       _families = List<String>.from(extractedData['data']['family_ids']);
       _currentFamilyIndex = _families.length - 1;
+      notifyListeners();
     } catch (e) {
       print(e);
     }

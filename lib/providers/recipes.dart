@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fridchen_app/providers/tags.dart';
 import 'package:fridchen_app/providers/unit.dart';
 
@@ -177,8 +181,30 @@ class Recipes with ChangeNotifier {
     return stars + items;
   }
 
+  Future<void> fetchAndSetItem(String familyId) async {
+    try {
+      final api_url = dotenv.env['BACKEND_URL'];
+      final url = Uri.parse(
+        '$api_url/menu/all/$familyId',
+      );
+      final res = await http.get(
+        url,
+      );
+
+      final extractedData = json.decode(res.body) as Map<String, dynamic>;
+      print(extractedData['data']);
+      final recipeItems =
+          List<Map<String, dynamic>>.from(extractedData['data']);
+
+      setRecipes(recipeItems);
+    } catch (e) {
+      print(e);
+    }
+  }
+
   void setRecipes(List<Map<String, dynamic>> items) {
     try {
+      print('setting recipes...');
       _items = items.map((item) {
         return Recipe(
           id: item['menu_id'],
@@ -200,6 +226,7 @@ class Recipes with ChangeNotifier {
         );
       }).toList();
       print('success!!');
+      notifyListeners();
     } catch (e) {
       print('e : $e');
     }
