@@ -7,6 +7,8 @@ import 'package:fridchen_app/widgets/dialog_confirm.dart';
 import 'package:fridchen_app/widgets/tag_list.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/api.dart';
+import '../providers/family.dart';
 import '../providers/list.dart';
 import '../themes/color.dart';
 import 'dialog_alert.dart';
@@ -27,8 +29,10 @@ class _ListListItemState extends State<ListListItem> {
     // Provider.of<ListItems>(context, listen: false).setTick(widget.item.id);
     // setState(() {});
     try {
-      // TODO: api tick
-
+      final familyId =
+          Provider.of<Families>(context, listen: false).currentFamilyId;
+      await Provider.of<Api>(context, listen: false)
+          .tickListItem(familyId, widget.item, isTick);
     } catch (e) {
       print(e);
       showDialog(
@@ -46,8 +50,10 @@ class _ListListItemState extends State<ListListItem> {
   Future<void> deleteItem() async {
     print('delete');
     try {
-      // Provider.of<ListItems>(context, listen: false).deleteItem(widget.item.id);
-      // TODO: api delete item
+      final familyId =
+          Provider.of<Families>(context, listen: false).currentFamilyId;
+      await Provider.of<Api>(context, listen: false)
+          .deleteListItem(familyId, widget.item);
     } catch (e) {
       print(e);
       //TODO: show bottom error
@@ -70,7 +76,7 @@ class _ListListItemState extends State<ListListItem> {
         child: FridgeNewItem(
           name: widget.item.name,
           setIsComfirm: setIsConfirm,
-        ), // TODO: default value
+        ),
       ),
     );
   }

@@ -397,21 +397,23 @@ class Api with ChangeNotifier {
     }
   }
 
-  Future<void> updateListItem(
+  Future<void> tickListItem(
+    String familyId,
     ListItem item,
+    bool isTick,
   ) async {
+    print('tick shopping list');
     final url = Uri.parse(
-      '$api_url/list/update?userid=$userId',
+      '$api_url/shopping_list/family_id/$familyId/ingredient_id/${item.id}',
     );
     try {
-      final res = await http.post(
+      final res = await http.patch(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: json.encode({
-          'id': item.id,
-          'isTick': item.isTick,
+          "is_bought": isTick,
         }),
       );
     } catch (e) {
@@ -421,17 +423,16 @@ class Api with ChangeNotifier {
   }
 
   Future<void> deleteListItem(
+    String familyId,
     ListItem item,
   ) async {
+    print('deleting shopping list');
     final url = Uri.parse(
-      '$api_url/list/delete?userid=$userId',
+      '$api_url/shopping_list/family_id/$familyId/ingredient_id/${item.id}',
     );
     try {
       final res = await http.delete(
         url,
-        body: json.encode({
-          'id': item.id,
-        }),
       );
     } catch (e) {
       print(e);

@@ -3,6 +3,8 @@ import 'package:fridchen_app/providers/list.dart';
 import 'package:fridchen_app/widgets/bottom_sheet_template.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/api.dart';
+import '../../providers/family.dart';
 import '../../providers/tags.dart';
 import '../../themes/color.dart';
 import '../../widgets/row_with_title.dart';
@@ -37,34 +39,22 @@ class _ListNewItemState extends State<ListNewItem> {
     final isValid = _form.currentState!.validate();
     if (!isValid) return;
 
-    final _tags =
-        Provider.of<Tags>(context, listen: false).getTagsById(_tagsId);
-    // final item = ListItem(id: '123', name: _name!, tags: _tags);
-
     _form.currentState!.save();
+
+    final listItem = ListItem(name: _name!, tagIds: _tagsId);
     try {
-      await Provider.of<ListItems>(context, listen: false).addNewItem(
-        _name!,
-        _tags,
-      );
+      final familyId =
+          Provider.of<Families>(context, listen: false).currentFamilyId;
+      await Provider.of<Api>(context, listen: false)
+          .addListItem(familyId, listItem);
       Navigator.pop(context);
-      // TODO vvv
+
+      // TODO : snackbar success
       // widget.showSavedConfirm(_name);
     } catch (e) {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text(e.toString()),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Okay'),
-            )
-          ],
-        ),
-      );
+      print(e);
+
+      // TODO : snackbar error
     }
   }
 
