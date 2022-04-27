@@ -183,6 +183,10 @@ class Recipes with ChangeNotifier {
     return stars + items;
   }
 
+  List<Recipe> get pinItems {
+    return [...items.where((element) => element.isPin).toList()];
+  }
+
   Future<void> fetchAndSetItem(String familyId) async {
     try {
       final api_url = dotenv.env['BACKEND_URL'];

@@ -16,9 +16,11 @@ import 'package:fridchen_app/widgets/dialog_confirm.dart';
 import 'package:fridchen_app/widgets/dialog_new_fridchen.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
+import 'package:socket_io_client/socket_io_client.dart';
 
 import '../providers/list.dart';
 import '../providers/recipes.dart';
+import '../socket.dart';
 import '../widgets/home_drawer.dart';
 import '../widgets/home_menus.dart';
 import '../widgets/row_with_title.dart';
@@ -26,8 +28,9 @@ import '../widgets/row_with_title.dart';
 class MyHomePage extends StatefulWidget {
   final List<String> familyIds;
   final String userId;
+  final Socket socket;
 
-  MyHomePage(this.familyIds, this.userId);
+  MyHomePage(this.familyIds, this.userId, this.socket);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -57,6 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
       await Provider.of<Families>(context, listen: false)
           .fetchAndSetFamily(widget.userId);
       _index += 1;
+      widget.socket.disconnect();
+      widget.socket.connect();
       // Provider.of<Families>(context, listen: false).setCurrentFamily(_index);
       await getAllData();
       // TODO call bottom success
@@ -79,6 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
       await Provider.of<Families>(context, listen: false)
           .fetchAndSetFamily(widget.userId);
       _index += 1;
+      widget.socket.disconnect();
+      widget.socket.connect();
       // Provider.of<Families>(context, listen: false).setCurrentFamily(_index);
       await getAllData();
       // TODO call bottom success
@@ -92,8 +99,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> changeFamily(int index) async {
+    print('change fam');
     _index = index;
     Provider.of<Families>(context, listen: false).setCurrentFamily(_index);
+    widget.socket.disconnect();
+    widget.socket.connect();
     await getAllData();
   }
 
@@ -142,6 +152,8 @@ class _MyHomePageState extends State<MyHomePage> {
         _isLoading = false;
         _isInit = true;
       });
+      // widget.socket.disconnect();
+      // widget.socket.connect();
     } catch (e) {
       print('err: $e');
       setState(() {
@@ -159,7 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
         data: Theme.of(context).copyWith(
           canvasColor: AppColors.green,
         ),
-        child: HomeDrawer(addNewFridchen, joinFamily),
+        child: HomeDrawer(addNewFridchen, joinFamily, widget.socket),
       ),
       backgroundColor: AppColors.lightGreen,
       body: (_isLoading && !_isInit)
@@ -452,6 +464,7 @@ class Recommend extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final pinRecipe = Provider.of<Recipes>(context).pinItems;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -476,44 +489,46 @@ class Recommend extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: ListView(
+              child: ListView.builder(
                 padding: EdgeInsets.all(0),
-                children: [
-                  ListTile(
-                    contentPadding: EdgeInsets.only(top: 2),
-                    dense: true,
-                    horizontalTitleGap: 12,
-                    leading: Icon(
-                      Icons.push_pin_rounded,
-                      size: 40,
-                      color: AppColors.darkGreen,
-                    ),
-                    title: const Text(
-                      'CHOCOLATE LAVA CAKE',
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.white,
-                      ),
+                itemCount: pinRecipe.length,
+                itemBuilder: (ctx, i) => ListTile(
+                  contentPadding: EdgeInsets.only(top: 2),
+                  dense: true,
+                  horizontalTitleGap: 12,
+                  leading: Icon(
+                    Icons.push_pin_rounded,
+                    size: 40,
+                    color: AppColors.darkGreen,
+                  ),
+                  title: Text(
+                    pinRecipe[i].name,
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
                     ),
                   ),
-                  ListTile(
-                    contentPadding: EdgeInsets.only(top: 2),
-                    dense: true,
-                    horizontalTitleGap: 12,
-                    leading: Icon(
-                      Icons.push_pin_rounded,
-                      size: 40,
-                      color: AppColors.darkGreen,
-                    ),
-                    title: const Text(
-                      'CHOCOLATE LAVA CAKE',
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
+                // children: [
+                //   ListTile(
+                //     contentPadding: EdgeInsets.only(top: 2),
+                //     dense: true,
+                //     horizontalTitleGap: 12,
+                //     leading: Icon(
+                //       Icons.push_pin_rounded,
+                //       size: 40,
+                //       color: AppColors.darkGreen,
+                //     ),
+                //     title: const Text(
+                //       'CHOCOLATE LAVA CAKE',
+                //       style: TextStyle(
+                //         fontSize: 30,
+                //         color: Colors.white,
+                //       ),
+                //     ),
+                //   ),
+
+                // ],
               ),
             ),
           ),

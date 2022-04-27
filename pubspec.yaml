@@ -47,6 +47,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.9.2
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path: "assets/fridchen_logo.png"
 
   # TODO icon, splash screen
 

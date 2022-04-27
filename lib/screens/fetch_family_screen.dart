@@ -5,6 +5,7 @@ import 'package:fridchen_app/screens/home_screen.dart';
 import 'package:fridchen_app/screens/qrcode/join_family_screen.dart';
 import 'package:fridchen_app/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 import '../socket.dart';
 import '../themes/color.dart';
@@ -38,10 +39,20 @@ class _FetchFamilyScreenState extends State<FetchFamilyScreen> {
               snapshot.connectionState == ConnectionState.waiting
                   ? SplashScreen()
                   : familyIds.isNotEmpty
-                      ? FutureBuilder(
+                      ? FutureBuilder<Socket>(
                           future: MySocket.initSocket(context),
-                          builder: (ctx, snap) =>
-                              MyHomePage(familyIds, widget.userId))
+                          builder: (ctx, snap) {
+                            if (snap.hasData) {
+                              return MyHomePage(
+                                familyIds,
+                                widget.userId,
+                                snap.data!,
+                              );
+                            } else {
+                              return SplashScreen();
+                            }
+                          },
+                        )
                       : NewFridchenScreen(widget.userId),
           // ? MyHomePage(familyIds, widget.userId)
           // : familyIds.isEmpty
@@ -176,6 +187,7 @@ class _NewFridchenScreenState extends State<NewFridchenScreen> {
             child: Text(
               'WELCOME\nTO FRIDCHEN!',
               textAlign: TextAlign.center,
+              textScaleFactor: 1.0,
               style: TextStyle(
                 color: AppColors.yellow,
                 fontSize: 64,
@@ -192,6 +204,7 @@ class _NewFridchenScreenState extends State<NewFridchenScreen> {
                     padding: EdgeInsets.fromLTRB(10, 15, 10, 10),
                     child: Text(
                       'Join Fridchen',
+                      textScaleFactor: 1.0,
                       style: TextStyle(
                         color: AppColors.yellow,
                         fontSize: 40,
@@ -226,6 +239,7 @@ class _NewFridchenScreenState extends State<NewFridchenScreen> {
                       ),
                       Text(
                         'OR',
+                        textScaleFactor: 1.0,
                         style: TextStyle(
                           color: AppColors.yellow,
                           fontSize: 32,
@@ -248,6 +262,7 @@ class _NewFridchenScreenState extends State<NewFridchenScreen> {
                     padding: EdgeInsets.fromLTRB(10, 15, 10, 10),
                     child: Text(
                       'New Fridchen',
+                      textScaleFactor: 1.0,
                       style: TextStyle(
                         color: AppColors.darkGreen,
                         fontSize: 40,

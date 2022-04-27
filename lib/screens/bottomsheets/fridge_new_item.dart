@@ -145,7 +145,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
       _nameController.text = widget.item!.name;
       _volumnController.text = widget.item!.countLeft.toString();
       _minController.text =
-          widget.item == null ? '' : widget.item!.min.toString();
+          widget.item!.min == null ? '' : widget.item!.min.toString();
       _tagsId = widget.item!.tagIds;
       // print(_tagsId);
       _selectedUnit = Provider.of<Units>(context, listen: false)
@@ -178,6 +178,8 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                       isDense: true,
                       contentPadding: EdgeInsets.fromLTRB(12, 6, 12, 2),
                     ),
+                    enableSuggestions: false,
+                    autocorrect: false,
                     cursorColor: AppColors.lightGreen,
                     style: TextStyle(
                       color: AppColors.white,
@@ -370,7 +372,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                       return null;
                     },
                     onSaved: (value) {
-                      _min = double.parse(value!);
+                      _min = double.tryParse(value!);
                     },
                   ),
                 ),

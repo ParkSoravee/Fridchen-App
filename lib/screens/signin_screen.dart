@@ -48,14 +48,15 @@ class _SignInScreenState extends State<SignInScreen> {
                   children: [
                     Image.asset(
                       'assets/icons/google_icon.png',
-                      height: 70,
-                      width: 70,
+                      height: 60,
+                      width: 60,
                     ),
                     Text(
                       'Sign in with Google',
+                      textScaleFactor: 1.0,
                       style: TextStyle(
                         color: AppColors.darkGreen,
-                        fontSize: 32,
+                        fontSize: 30,
                         height: 1.2,
                       ),
                     ),

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/family.dart';
 import 'package:provider/provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 import '../providers/auth.dart';
 import '../screens/qrcode/join_family_screen.dart';
@@ -11,8 +12,9 @@ import 'dialog_new_fridchen.dart';
 class HomeDrawer extends StatefulWidget {
   final Function(String) addNewFridchen;
   final Function(String) joinFamily;
+  final Socket socket;
 
-  const HomeDrawer(this.addNewFridchen, this.joinFamily);
+  const HomeDrawer(this.addNewFridchen, this.joinFamily, this.socket);
 
   @override
   State<HomeDrawer> createState() => _HomeDrawerState();
@@ -28,6 +30,8 @@ class _HomeDrawerState extends State<HomeDrawer> {
   Future<void> _leaveFamily() async {
     final userId = Provider.of<Auth>(context, listen: false).userId!;
     await Provider.of<Families>(context, listen: false).leaveFamily(userId);
+    widget.socket.disconnect();
+    widget.socket.connect();
   }
 
   void _joinFamily() {

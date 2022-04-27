@@ -15,14 +15,14 @@ import 'package:socket_io_client/socket_io_client.dart';
 class MySocket {
   final BuildContext context;
   MySocket(this.context);
-  // late IO.Socket socket;
-  static Future<void> initSocket(BuildContext context) async {
+  late IO.Socket socket;
+  static Future<Socket> initSocket(BuildContext context) async {
+    IO.Socket socket = IO.io(dotenv.env['SOCKET'], <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': false,
+    });
     try {
-      Provider.of<FridgeItems>(context, listen: false).test;
-      IO.Socket socket = IO.io(dotenv.env['SOCKET'], <String, dynamic>{
-        'transports': ['websocket'],
-        'autoConnect': false,
-      });
+      // Provider.of<FridgeItems>(context, listen: false).test;
 
       // Connect to websocket
       print('connecting socket...');
@@ -76,6 +76,7 @@ class MySocket {
     } catch (e) {
       print(e.toString());
     }
+    return socket;
   }
 
   // Send Location to Server
