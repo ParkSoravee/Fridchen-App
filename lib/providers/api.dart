@@ -133,19 +133,62 @@ class Api with ChangeNotifier {
     double consume,
   ) async {
     print('consuming fridge item');
+
     final url = Uri.parse(
       '$api_url/fridge_item/family_id/$familyId/ingredient_id/${item.id}',
     );
     try {
-      final res = await http.patch(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: json.encode({
-          'cout_left': item.countLeft - consume,
-        }),
-      );
+      final isEmpty =
+          double.parse((item.countLeft - consume).toStringAsFixed(2)) <= 0;
+      final isStar = item.isStar;
+
+      // check is going to pass the min value? if star API add to list
+      if (isStar && item.min != null) {
+        final isPassMin =
+            item.countLeft > item.min! && item.countLeft - consume <= item.min!;
+        if (isPassMin) {
+          print('add to list');
+          // API add to list
+          await addListItem(
+              familyId, ListItem(name: item.name, tagIds: item.tagIds));
+        }
+      }
+      // if not empty? API update : API delete
+      if (!isEmpty) {
+        final newItem = FridgeItem(
+          id: item.id,
+          name: item.name,
+          countLeft:
+              double.parse((item.countLeft - consume).toStringAsFixed(2)),
+          unitIds: item.unitIds,
+        );
+        print(
+            'update left: ${double.parse((item.countLeft - consume).toStringAsFixed(2))}');
+        // * API update
+        final res = await http.patch(
+          url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode({
+            'cout_left': item.countLeft - consume,
+          }),
+        );
+      } else {
+        // * API delete
+        await deleteFridgeItem(familyId, item);
+      }
+
+      // ------
+      // final res = await http.patch(
+      //   url,
+      //   headers: <String, String>{
+      //     'Content-Type': 'application/json; charset=UTF-8',
+      //   },
+      //   body: json.encode({
+      //     'cout_left': item.countLeft - consume,
+      //   }),
+      // );
     } catch (e) {
       print(e);
       throw e;
@@ -247,11 +290,7 @@ class Api with ChangeNotifier {
                   })
               .toList(),
           'steps': item.steps,
-          'tag_ids': item.tagIds
-              .map(
-                (e) => e,
-              )
-              .toList(),
+          'tag_ids': item.tagIds,
           // 'isPin': item.isPin,
         }),
       );
@@ -264,6 +303,7 @@ class Api with ChangeNotifier {
   Future<void> updateRecipeItem(
     Recipe item,
   ) async {
+    print(item.id);
     final url = Uri.parse(
       '$api_url/menu/menu_id/${item.id}',
     );
@@ -275,21 +315,17 @@ class Api with ChangeNotifier {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: json.encode({
-          'id': item.id,
+          // 'id': item.id,
           'name': item.name,
           'ingredients': item.ingredients
               .map((e) => {
-                    'name': e.name,
-                    'amount': e.amount,
-                    'unit': e.unitId,
+                    'ingredient_id': e.id!,
+                    'count': e.amount,
+                    'unit_id': e.unitId,
                   })
               .toList(),
           'steps': item.steps.map((step) => step).toList(),
-          'tag_ids': item.tagIds
-              .map(
-                (e) => e,
-              )
-              .toList(),
+          'tag_ids': item.tagIds,
         }),
       );
     } catch (e) {
@@ -361,6 +397,30 @@ class Api with ChangeNotifier {
           "menu_id": item.id,
         }),
       );
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
+
+  Future<String> checkIngredientId(String name) async {
+    print('checking ingredient name');
+    final url = Uri.parse(
+      '$api_url/ingredient/check_name',
+    );
+    try {
+      final res = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode({
+          'name': name,
+        }),
+      );
+      final extractedData = json.decode(res.body) as Map<String, dynamic>;
+
+      return extractedData['data']['_id'];
     } catch (e) {
       print(e);
       throw e;

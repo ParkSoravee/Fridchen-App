@@ -12,11 +12,13 @@ class Ingredient {
   final String name;
   final double amount;
   final String unitId;
+  final String? id;
 
   Ingredient({
     required this.name,
     required this.amount,
     required this.unitId,
+    this.id,
   });
 }
 
@@ -214,7 +216,8 @@ class Recipes with ChangeNotifier {
           ingredients: List<Ingredient>.from(
             (List<Map<String, dynamic>>.from(item['ingredients'])).map(
               (e) => Ingredient(
-                name: e['ingredient_id'],
+                id: e['ingredient_id'],
+                name: e['ingredient_name'],
                 amount: e['count'].toDouble(),
                 unitId: e['unit_id'],
               ),

@@ -9,6 +9,7 @@ import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/utils/date.dart';
 import 'package:fridchen_app/widgets/bottom_sheet_template.dart';
 import 'package:fridchen_app/widgets/row_with_title.dart';
+import 'package:fridchen_app/widgets/snack_bar.dart';
 import 'package:fridchen_app/widgets/tag_select.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -21,12 +22,14 @@ class FridgeNewItem extends StatefulWidget {
   final FridgeItem? item;
   final Function? setIsComfirm;
   final String? name;
+  final List<String>? tagIds;
 
   const FridgeNewItem({
     Key? key,
     this.setIsComfirm,
     this.item,
     this.name,
+    this.tagIds,
   }) : super(key: key);
 
   @override
@@ -111,8 +114,8 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
       }
       if (widget.setIsComfirm != null) widget.setIsComfirm!();
       Navigator.pop(context);
-      // TODO vvv
-      // widget.showSavedConfirm(_name);
+      // TODO success
+
     } catch (e) {
       print(e);
       showDialog(
@@ -132,6 +135,10 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
   void initState() {
     if (widget.name != null) {
       _nameController.text = widget.name!;
+    }
+
+    if (widget.tagIds != null) {
+      _tagsId = widget.tagIds!;
     }
 
     if (widget.item != null) {
@@ -345,7 +352,8 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                         TextInputType.numberWithOptions(decimal: true),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter min.';
+                        // return 'Please enter min.';
+                        return null;
                       }
 
                       if (double.tryParse(value) == null) {

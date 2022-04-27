@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fridchen_app/providers/api.dart';
 import 'package:fridchen_app/providers/recipes.dart';
 import 'package:fridchen_app/widgets/row_with_title.dart';
 import 'package:provider/provider.dart';
@@ -28,12 +29,18 @@ class _DialogRecipeNewIngredientState extends State<DialogRecipeNewIngredient> {
   double? _amount;
   String? _selectedUnit;
 
-  void submitForm() {
+  void submitForm() async {
     final isValid = _form.currentState!.validate();
     if (!isValid) return;
+    // TODO : try catch
 
     _form.currentState!.save();
+    final _id = await Provider.of<Api>(context, listen: false)
+        .checkIngredientId(_name!);
+    print('ing id: $_id');
+
     final ing = Ingredient(
+      id: _id,
       name: _name!,
       amount: _amount!,
       unitId: Provider.of<Units>(context, listen: false)

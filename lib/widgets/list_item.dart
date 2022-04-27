@@ -76,6 +76,7 @@ class _ListListItemState extends State<ListListItem> {
         child: FridgeNewItem(
           name: widget.item.name,
           setIsComfirm: setIsConfirm,
+          tagIds: widget.item.tagIds,
         ),
       ),
     );

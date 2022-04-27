@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/list.dart';
 import 'package:fridchen_app/widgets/bottom_sheet_template.dart';
+import 'package:fridchen_app/widgets/snack_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/api.dart';
@@ -50,7 +51,7 @@ class _ListNewItemState extends State<ListNewItem> {
       Navigator.pop(context);
 
       // TODO : snackbar success
-      // widget.showSavedConfirm(_name);
+
     } catch (e) {
       print(e);
 
@@ -64,7 +65,9 @@ class _ListNewItemState extends State<ListNewItem> {
       title: 'Add in list',
       isShort: true,
       background: primaryColor,
-      submitForm: submitForm,
+      submitForm: () {
+        submitForm();
+      },
       child: Form(
         child: Column(
           children: [

@@ -74,7 +74,16 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
       if (widget.item != null) {
         if (widget.onEdit) {
           // edit
-          await Provider.of<Api>(context, listen: false).updateRecipeItem(item);
+
+          final itemUpdate = Recipe(
+            id: widget.item!.id,
+            name: _name!,
+            ingredients: _ingredients,
+            steps: _steps,
+            tagIds: _tagsId,
+          );
+          await Provider.of<Api>(context, listen: false)
+              .updateRecipeItem(itemUpdate);
         }
       } else {
         // new
