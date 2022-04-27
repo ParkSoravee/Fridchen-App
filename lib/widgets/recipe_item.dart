@@ -6,6 +6,8 @@ import 'package:fridchen_app/screens/bottomsheets/recipe_new_item.dart';
 import 'package:fridchen_app/widgets/tag_list.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/api.dart';
+import '../providers/family.dart';
 import '../providers/tags.dart';
 import '../themes/color.dart';
 import 'dialog_confirm.dart';
@@ -138,7 +140,10 @@ class _RecipeListItemState extends State<RecipeListItem> {
 
     if (!isConfirm) return;
     try {
-      // API pin
+      final familyId =
+          Provider.of<Families>(context, listen: false).currentFamilyId;
+      await Provider.of<Api>(context, listen: false)
+          .pinRecipeItem(familyId, widget.item);
       // TODO: bottom success
     } catch (e) {
       // TODO: bottom error
@@ -164,7 +169,10 @@ class _RecipeListItemState extends State<RecipeListItem> {
 
     if (!isConfirm) return;
     try {
-      // API delete
+      final familyId =
+          Provider.of<Families>(context, listen: false).currentFamilyId;
+      await Provider.of<Api>(context, listen: false)
+          .deleteRecipeItem(familyId, widget.item);
       // TODO: bottom success
     } catch (e) {
       // TODO: bottom error
@@ -234,8 +242,9 @@ class _RecipeListItemState extends State<RecipeListItem> {
                   children: [
                     Expanded(
                       child: TagList(
-                          tags: Provider.of<Tags>(context, listen: false)
-                              .getTagsById(widget.item.tagIds)),
+                        tags: Provider.of<Tags>(context, listen: false)
+                            .getTagsById(widget.item.tagIds),
+                      ),
                     ),
                   ],
                 ),

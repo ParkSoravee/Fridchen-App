@@ -7,6 +7,8 @@ import 'package:fridchen_app/widgets/ingredient_step_list_item.dart';
 import 'package:fridchen_app/widgets/row_with_title.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/api.dart';
+import '../../providers/family.dart';
 import '../../providers/recipes.dart';
 import '../../providers/tags.dart';
 import '../../providers/unit.dart';
@@ -59,8 +61,26 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
 
     _form.currentState!.save();
 
+    final item = Recipe(
+      name: _name!,
+      ingredients: _ingredients,
+      steps: _steps,
+      tagIds: _tagsId,
+    );
+
     try {
-      // TODO API: new or edit
+      final familyId =
+          Provider.of<Families>(context, listen: false).currentFamilyId;
+      if (widget.item != null) {
+        if (widget.onEdit) {
+          // edit
+          await Provider.of<Api>(context, listen: false).updateRecipeItem(item);
+        }
+      } else {
+        // new
+        await Provider.of<Api>(context, listen: false)
+            .addRecipeItem(familyId, item);
+      }
 
       Navigator.pop(context);
       // TODO: show success
@@ -78,8 +98,27 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
     }
   }
 
-  void cook() {
-    Navigator.pop(context);
+  Future<void> cook() async {
+    try {
+      final familyId =
+          Provider.of<Families>(context, listen: false).currentFamilyId;
+      await Provider.of<Api>(context, listen: false)
+          .cookRecipeItem(familyId, widget.item!);
+
+      Navigator.pop(context);
+      // TODO: show success
+    } catch (e) {
+      print(e);
+      showDialog(
+        context: context,
+        builder: (ctx) => DialogAlert(
+          title: 'Please connect the internet.',
+          smallTitle: true,
+          primaryColor: AppColors.white,
+          backgroundColor: AppColors.red,
+        ),
+      );
+    }
   }
 
   Future<void> addNewIngredient() async {

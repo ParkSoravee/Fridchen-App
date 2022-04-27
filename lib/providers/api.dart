@@ -102,22 +102,22 @@ class Api with ChangeNotifier {
   ) async {
     print('editing fridge item...');
     final url = Uri.parse(
-      '$api_url/fridge_item/add_fridge_item',
+      '$api_url/fridge_item/edit/family_id/$familyId/ingredient_id/${item.id}',
     );
     try {
-      final res = await http.post(
+      final res = await http.patch(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: json.encode({
-          'family_id': familyId,
           'name': item.name,
-          'count': item.countLeft,
+          'cout_left': item.countLeft,
           'unit_id': item.unitIds,
           'min': item.min ?? 0,
           'exp': item.exp == null ? null : item.exp!.toIso8601String(),
           'tags': item.tagIds,
+          // 'is_star' : item.isStar,
         }),
       );
     } catch (e) {
@@ -131,6 +131,7 @@ class Api with ChangeNotifier {
     FridgeItem item,
     double consume,
   ) async {
+    print('consuming fridge item');
     final url = Uri.parse(
       '$api_url/fridge_item/family_id/$familyId/ingredient_id/${item.id}',
     );
@@ -159,6 +160,7 @@ class Api with ChangeNotifier {
       '$api_url/fridge_item/family_id/$familyId/ingredient_id/${item.id}',
     );
     try {
+      print('set EXP');
       final res = await http.patch(
         url,
         headers: <String, String>{
@@ -178,6 +180,7 @@ class Api with ChangeNotifier {
     String familyId,
     FridgeItem item,
   ) async {
+    print('set star');
     final url = Uri.parse(
       '$api_url/family_ingredient/set_is_star',
     );
@@ -205,6 +208,7 @@ class Api with ChangeNotifier {
     String familyId,
     FridgeItem item,
   ) async {
+    print('deleting fridge');
     final url = Uri.parse(
       '$api_url/fridge_item/family_id/$familyId/ingredient_id/${item.id}',
     );
@@ -223,6 +227,7 @@ class Api with ChangeNotifier {
     String familyId,
     Recipe item,
   ) async {
+    print('creating recipe');
     final url = Uri.parse(
       '$api_url/menu/create_menu',
     );
@@ -243,7 +248,7 @@ class Api with ChangeNotifier {
                   })
               .toList(),
           'steps': item.steps,
-          'tags': item.tagIds
+          'tag_ids': item.tagIds
               .map(
                 (e) => e,
               )
@@ -258,14 +263,14 @@ class Api with ChangeNotifier {
   }
 
   Future<void> updateRecipeItem(
-    // TODO: smart
     Recipe item,
   ) async {
     final url = Uri.parse(
-      '$api_url/recipe/update?userid=$userId',
+      '$api_url/menu/menu_id/${item.id}',
     );
     try {
-      final res = await http.post(
+      print('updating recipe...');
+      final res = await http.patch(
         url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -281,14 +286,11 @@ class Api with ChangeNotifier {
                   })
               .toList(),
           'steps': item.steps.map((step) => step).toList(),
-          // 'tags': item.tagIds
-          //     .map((e) => {
-          //           'id': e.id,
-          //           'name': e.name,
-          //           'colorCode': e.colorCode,
-          //         })
-          //     .toList(),
-          'isPin': item.isPin,
+          'tag_ids': item.tagIds
+              .map(
+                (e) => e,
+              )
+              .toList(),
         }),
       );
     } catch (e) {
@@ -298,17 +300,16 @@ class Api with ChangeNotifier {
   }
 
   Future<void> deleteRecipeItem(
+    String familyId,
     Recipe item,
   ) async {
+    print('deleting menu...');
     final url = Uri.parse(
-      '$api_url/recipe/delete?userid=$userId',
+      '$api_url/menu/menu_id/${item.id}/family_id/$familyId',
     );
     try {
       final res = await http.delete(
         url,
-        body: json.encode({
-          'id': item.id,
-        }),
       );
     } catch (e) {
       print(e);
@@ -317,10 +318,12 @@ class Api with ChangeNotifier {
   }
 
   Future<void> pinRecipeItem(
+    String familyId,
     Recipe item,
   ) async {
+    print('pinning recipe');
     final url = Uri.parse(
-      '$api_url/recipe/pin?userid=$userId',
+      '$api_url/menu/set_is_pin',
     );
     try {
       final res = await http.post(
@@ -329,8 +332,36 @@ class Api with ChangeNotifier {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: json.encode({
-          'id': item.id,
-          'isPin': item.isPin,
+          "family_id": familyId,
+          "menu_id": item.id,
+          "is_pin": !item.isPin,
+        }),
+      );
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
+
+  Future<void> cookRecipeItem(
+    // TODO: smart
+    String familyId,
+    Recipe item,
+  ) async {
+    print('cooking recipe');
+    final url = Uri.parse(
+      '$api_url/menu/set_is_pin',
+    );
+    try {
+      final res = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode({
+          "family_id": familyId,
+          "menu_id": item.id,
+          "is_pin": !item.isPin,
         }),
       );
     } catch (e) {

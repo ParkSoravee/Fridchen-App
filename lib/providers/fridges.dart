@@ -135,7 +135,9 @@ class FridgeItems with ChangeNotifier {
         return FridgeItem(
           id: item['ingredient_id'],
           name: item['ingredient_name'],
-          min: item['min'] == null ? null : item['min'].toDouble(),
+          min: (item['min'] == null || item['min'] == 0)
+              ? null
+              : item['min'].toDouble(),
           countLeft: item['cout_left'].toDouble(),
           // countLeft: 11.0,
           unitIds: item['unit_id'],
