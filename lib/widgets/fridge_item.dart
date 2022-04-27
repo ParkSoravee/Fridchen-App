@@ -11,6 +11,7 @@ import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/widgets/tag_list.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/tags.dart';
 import '../screens/bottomsheets/fridge_new_item.dart';
 import 'dialog_consume.dart';
 
@@ -95,8 +96,8 @@ class _FridgeListItemState extends State<FridgeListItem> {
 
   Future<void> addToList() async {
     try {
-      Provider.of<ListItems>(context, listen: false)
-          .addNewItem(widget.item.name, widget.item.tags);
+      // Provider.of<ListItems>(context, listen: false)
+      //     .addNewItem(widget.item.name, widget.item.tagIds);
       // TODO: bottom success
     } catch (e) {
       // TODO: bottom error
@@ -288,13 +289,15 @@ class _FridgeListItemState extends State<FridgeListItem> {
                 Row(
                   children: [
                     Expanded(
-                      child: TagList(tags: widget.item.tags),
+                      child: TagList(
+                          tags: Provider.of<Tags>(context)
+                              .getTagsById(widget.item.tagIds)),
                     ),
                     SizedBox(
                       width: 8,
                     ),
                     Text(
-                      '${(widget.item.countLeft % 1 == 0) ? widget.item.countLeft.toStringAsFixed(0) : widget.item.countLeft} ${widget.item.unit}',
+                      '${(widget.item.countLeft % 1 == 0) ? widget.item.countLeft.toStringAsFixed(0) : widget.item.countLeft} ${widget.item.unit.name}',
                       style: TextStyle(
                         color: AppColors.white,
                         fontSize: 24,

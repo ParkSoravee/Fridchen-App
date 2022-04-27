@@ -7,7 +7,7 @@ class Unit {
   Unit({required this.id, required this.name});
 }
 
-class Units {
+class Units with ChangeNotifier {
   List<Unit> _items = [
     Unit(
       id: '62681408c5b8172fe1b14476',

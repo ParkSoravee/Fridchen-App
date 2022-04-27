@@ -6,6 +6,7 @@ import 'package:fridchen_app/providers/family.dart';
 import 'package:fridchen_app/providers/fridges.dart';
 import 'package:fridchen_app/providers/list.dart';
 import 'package:fridchen_app/providers/recipes.dart';
+import 'package:fridchen_app/providers/unit.dart';
 import 'package:fridchen_app/screens/fetch_family_screen.dart';
 import 'package:fridchen_app/screens/home_screen.dart';
 import 'package:fridchen_app/screens/signin_screen.dart';
@@ -34,6 +35,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (ctx) => FridgeItems(),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => Units(),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Recipes(),

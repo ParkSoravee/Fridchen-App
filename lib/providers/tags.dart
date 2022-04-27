@@ -39,4 +39,9 @@ class Tags with ChangeNotifier {
 
     return selectTags;
   }
+
+  Tag getTagById(String id) {
+    final selectTag = _items.firstWhere((e) => e.id == id);
+    return selectTag;
+  }
 }

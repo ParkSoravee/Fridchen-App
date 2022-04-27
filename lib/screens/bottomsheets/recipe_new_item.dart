@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/recipes.dart';
 import '../../providers/tags.dart';
+import '../../providers/unit.dart';
 import '../../widgets/dialog_alert.dart';
 import '../../widgets/tag_select.dart';
 
@@ -125,9 +126,7 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
       _nameController.text = widget.item!.name;
       _ingredients = [...widget.item!.ingredients];
       _steps = [...widget.item!.steps];
-      _tagsId = widget.item!.tags.map((e) {
-        return e.id;
-      }).toList();
+      _tagsId = widget.item!.tagIds;
     }
     super.initState();
   }
@@ -345,7 +344,8 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
         itemBuilder: (ctx, i) => IngredientStepListItem(
           name: _ingredients[i].name,
           index: i,
-          amount: '${_ingredients[i].amount} ${_ingredients[i].unit}',
+          amount:
+              '${_ingredients[i].amount} ${Provider.of<Units>(context, listen: false).getNameById(_ingredients[i].unitId)}',
           onDelete:
               (widget.item == null || widget.onEdit) ? deleteIngredient : null,
         ),

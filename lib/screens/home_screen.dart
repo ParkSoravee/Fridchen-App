@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:fridchen_app/providers/api.dart';
 import 'package:fridchen_app/providers/family.dart';
+import 'package:fridchen_app/providers/fridges.dart';
 import 'package:fridchen_app/screens/fridge_screen.dart';
 import 'package:fridchen_app/screens/list_screen.dart';
 import 'package:fridchen_app/screens/qrcode/add_member_screen.dart';
@@ -16,6 +17,8 @@ import 'package:fridchen_app/widgets/dialog_new_fridchen.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
+import '../providers/list.dart';
+import '../providers/recipes.dart';
 import '../widgets/home_drawer.dart';
 import '../widgets/home_menus.dart';
 import '../widgets/row_with_title.dart';
@@ -36,7 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isLoading = true;
   bool _isInit = false;
   late List<String> _familyIds;
-  late String _familyName;
+  String? _familyName;
 
   @override
   void initState() {
@@ -112,14 +115,26 @@ class _MyHomePageState extends State<MyHomePage> {
       );
 
       final extractedData = json.decode(res.body) as Map<String, dynamic>;
-      print('data:' + extractedData['data'].toString());
-      // TODO: Here
+      // print('data:' + extractedData['data'].toString());
+      // TODO: Check error code
       // * set every thing
       // set fridge item
+      final fridgeItems = List<Map<String, dynamic>>.from(
+          extractedData['data']['fridge_items']);
+      print('fridge items:\n ${fridgeItems.length} $fridgeItems');
+      Provider.of<FridgeItems>(context, listen: false).setItem(fridgeItems);
 
       // set recipe
+      final recipeItems =
+          List<Map<String, dynamic>>.from(extractedData['data']['menus']);
+      print('recipe items:\n  ${recipeItems.length} $recipeItems');
+      Provider.of<Recipes>(context, listen: false).setRecipes(recipeItems);
 
       // set shopping list
+      final listItems = List<Map<String, dynamic>>.from(
+          extractedData['data']['shopping_lists']);
+      print('list items:\n  ${listItems.length} $listItems');
+      Provider.of<ListItems>(context, listen: false).setListItem(listItems);
 
       // * ------------------
       _familyName = extractedData['data']['family_name'];
@@ -201,7 +216,7 @@ class FamilySelect extends StatelessWidget {
   final String familyId;
   final Function(int) changeFamily;
   final Function(String) addNewFridchen;
-  final String familyName;
+  final String? familyName;
 
   const FamilySelect({
     required this.currentIndex,
@@ -293,14 +308,16 @@ class FamilySelect extends StatelessWidget {
                   Flexible(
                     fit: FlexFit.loose,
                     child: FittedBox(
-                      child: Text(
-                        familyName,
-                        textScaleFactor: 1,
-                        style: TextStyle(
-                          fontSize: 65,
-                          color: AppColors.darkGreen,
-                        ),
-                      ),
+                      child: familyName != null
+                          ? Text(
+                              familyName!,
+                              textScaleFactor: 1,
+                              style: TextStyle(
+                                fontSize: 65,
+                                color: AppColors.darkGreen,
+                              ),
+                            )
+                          : CircularProgressIndicator(),
                     ),
                   ),
                   IconButton(

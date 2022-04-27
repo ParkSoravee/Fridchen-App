@@ -1,51 +1,66 @@
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/tags.dart';
 
-import '../themes/color.dart';
-
 class ListItem {
   final String? id;
   final String name;
-  final List<Tag> tags;
+  final List<String> tagIds;
   bool isTick;
 
   ListItem({
     this.id,
     required this.name,
-    required this.tags,
+    required this.tagIds,
     this.isTick = false,
   });
 }
 
 class ListItems with ChangeNotifier {
   List<ListItem> _items = [
-    ListItem(
-      id: '1',
-      name: 'Butter',
-      tags: [
-        Tag('1', 'Dairy', AppColors.yellow.hashCode),
-      ],
-    ),
-    ListItem(
-      id: '2',
-      isTick: true,
-      name: 'Chicken',
-      tags: [
-        Tag('4', 'Fresh', AppColors.green.hashCode),
-      ],
-    ),
-    ListItem(
-      id: '34567',
-      name: 'Bok choy',
-      tags: [
-        Tag('4', 'Fresh', AppColors.green.hashCode),
-        Tag('2', 'Vagetable', AppColors.lightGreen.hashCode),
-      ],
-    ),
+    //   ListItem(
+    //     id: '1',
+    //     name: 'Butter',
+    //     tagIds: [
+    //       Tag('1', 'Dairy', AppColors.yellow.hashCode),
+    //     ],
+    //   ),
+    //   ListItem(
+    //     id: '2',
+    //     isTick: true,
+    //     name: 'Chicken',
+    //     tagIds: [
+    //       Tag('4', 'Fresh', AppColors.green.hashCode),
+    //     ],
+    //   ),
+    //   ListItem(
+    //     id: '34567',
+    //     name: 'Bok choy',
+    //     tagIds: [
+    //       Tag('4', 'Fresh', AppColors.green.hashCode),
+    //       Tag('2', 'Vagetable', AppColors.lightGreen.hashCode),
+    //     ],
+    //   ),
   ];
 
   List<ListItem> get items {
     return [..._items];
+  }
+
+  void setListItem(List<Map<String, dynamic>> items) {
+    try {
+      _items = items.map((item) {
+        return ListItem(
+          id: item['ingredient_id'],
+          name: item['ingredient_name'],
+          tagIds: (List<Map<String, dynamic>>.from(item['tags']))
+              .map((e) => e['tag_id'] as String)
+              .toList(),
+        );
+      }).toList();
+      print('success!!');
+    } catch (e) {
+      print('e: $e');
+    }
   }
 
   List<ListItem> search(String str, List<String> tags) {
@@ -54,8 +69,8 @@ class ListItems with ChangeNotifier {
       for (int i = 0; i < tags.length; i++) {
         searchItems = searchItems
             .where(
-              (item) => item.tags.any(
-                (tag) => tags[i] == tag.id,
+              (item) => item.tagIds.any(
+                (tag) => tags[i] == tag,
               ),
             )
             .toList();

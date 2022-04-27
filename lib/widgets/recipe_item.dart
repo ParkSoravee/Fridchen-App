@@ -4,7 +4,9 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fridchen_app/providers/recipes.dart';
 import 'package:fridchen_app/screens/bottomsheets/recipe_new_item.dart';
 import 'package:fridchen_app/widgets/tag_list.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/tags.dart';
 import '../themes/color.dart';
 import 'dialog_confirm.dart';
 import 'ingredient_step_list_item.dart';
@@ -231,7 +233,9 @@ class _RecipeListItemState extends State<RecipeListItem> {
                 Row(
                   children: [
                     Expanded(
-                      child: TagList(tags: widget.item.tags),
+                      child: TagList(
+                          tags: Provider.of<Tags>(context, listen: false)
+                              .getTagsById(widget.item.tagIds)),
                     ),
                   ],
                 ),

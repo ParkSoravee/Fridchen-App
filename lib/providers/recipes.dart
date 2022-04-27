@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/tags.dart';
+import 'package:fridchen_app/providers/unit.dart';
 
 import '../themes/color.dart';
 
 class Ingredient {
   final String name;
   final double amount;
-  final String unit;
+  final String unitId;
 
   Ingredient({
     required this.name,
     required this.amount,
-    required this.unit,
+    required this.unitId,
   });
 }
 
@@ -20,7 +21,7 @@ class Recipe {
   final String name;
   final List<Ingredient> ingredients;
   final List<String> steps;
-  final List<Tag> tags;
+  final List<String> tagIds;
   bool isPin;
 
   Recipe({
@@ -28,142 +29,142 @@ class Recipe {
     required this.name,
     required this.ingredients,
     required this.steps,
-    required this.tags,
+    required this.tagIds,
     this.isPin = false,
   });
 }
 
 class Recipes with ChangeNotifier {
   List<Recipe> _items = [
-    Recipe(
-      id: '9999',
-      name: 'Chocolate lava cake',
-      isPin: true,
-      ingredients: [
-        Ingredient(
-          name: 'Ingredient 1',
-          amount: 200,
-          unit: 'Millilitres',
-        ),
-        Ingredient(
-          name: 'Ingredient 2',
-          amount: 50,
-          unit: 'Grams',
-        ),
-        Ingredient(
-          name: 'Ingredient 3',
-          amount: 1000,
-          unit: 'Kilograms',
-        ),
-      ],
-      steps: [
-        'step1 to do hello ',
-        'step2 to do hello world asdasdasd',
-        'step3 to do hello world',
-        'step4 to do hello world asdsdsadasdasd',
-        'step5 to do hello world asdasd',
-      ],
-      tags: [
-        Tag('5', 'Dessert', AppColors.orange.hashCode),
-        Tag('1', 'Dairy', AppColors.yellow.hashCode),
-      ],
-    ),
-    Recipe(
-      id: '8888',
-      name: 'Fried pork with basil leaves',
-      ingredients: [
-        Ingredient(
-          name: 'Ingredient 1',
-          amount: 200,
-          unit: 'Millilitres',
-        ),
-        Ingredient(
-          name: 'Ingredient 2',
-          amount: 50,
-          unit: 'Grams',
-        ),
-        Ingredient(
-          name: 'Ingredient 3',
-          amount: 1000,
-          unit: 'Kilograms',
-        ),
-      ],
-      steps: [
-        'step1 to do hello ',
-        'step2 to do hello world asdasdasd',
-        'step3 to do hello world',
-        'step4 to do hello world asdsdsadasdasd',
-        'step5 to do hello world asdasd',
-      ],
-      tags: [
-        Tag('4', 'Fresh', AppColors.green.hashCode),
-        Tag('3', 'Meat', AppColors.orange.hashCode),
-        Tag('2', 'Vagetable', AppColors.lightGreen.hashCode),
-      ],
-    ),
-    Recipe(
-      id: '7777',
-      name: 'Tom Yum Kung',
-      ingredients: [
-        Ingredient(
-          name: 'Ingredient 1',
-          amount: 200,
-          unit: 'Millilitres',
-        ),
-        Ingredient(
-          name: 'Ingredient 2',
-          amount: 50,
-          unit: 'Grams',
-        ),
-        Ingredient(
-          name: 'Ingredient 3',
-          amount: 1000,
-          unit: 'Kilograms',
-        ),
-      ],
-      steps: [
-        'step1 to do hello ',
-        'step2 to do hello world asdasdasd',
-        'step3 to do hello world',
-        'step4 to do hello world asdsdsadasdasd',
-        'step5 to do hello world asdasd',
-      ],
-      tags: [
-        Tag('5', 'Dessert', AppColors.orange.hashCode),
-        Tag('1', 'Dairy', AppColors.yellow.hashCode),
-      ],
-    ),
-    Recipe(
-      id: '6666',
-      name: 'Japanese omelette',
-      ingredients: [
-        Ingredient(
-          name: 'Ingredient 1',
-          amount: 200,
-          unit: 'Millilitres',
-        ),
-        Ingredient(
-          name: 'Ingredient 2',
-          amount: 50,
-          unit: 'Grams',
-        ),
-        Ingredient(
-          name: 'Ingredient 3',
-          amount: 1000,
-          unit: 'Kilograms',
-        ),
-      ],
-      steps: [
-        'step1 to do hello ',
-        'step2 to do hello world asdasdasd',
-        'step3 to do hello world',
-        'step4 to do hello world asdsdsadasdasd',
-        'step5 to do hello world asdasd',
-      ],
-      tags: [
-        Tag('4', 'Fresh', AppColors.green.hashCode),
-      ],
-    ),
+    // Recipe(
+    //   id: '9999',
+    //   name: 'Chocolate lava cake',
+    //   isPin: true,
+    //   ingredients: [
+    //     Ingredient(
+    //       name: 'Ingredient 1',
+    //       amount: 200,
+    //       unitId: '6268144dc5b8172fe1b14482',
+    //     ),
+    //     Ingredient(
+    //       name: 'Ingredient 2',
+    //       amount: 50,
+    //       unitId: '626814a9c5b8172fe1b1448a',
+    //     ),
+    //     Ingredient(
+    //       name: 'Ingredient 3',
+    //       amount: 1000,
+    //       unitId: '6268143ac5b8172fe1b1447e',
+    //     ),
+    //   ],
+    //   steps: [
+    //     'step1 to do hello ',
+    //     'step2 to do hello world asdasdasd',
+    //     'step3 to do hello world',
+    //     'step4 to do hello world asdsdsadasdasd',
+    //     'step5 to do hello world asdasd',
+    //   ],
+    //   tagIds: [
+    //     Tag('5', 'Dessert', AppColors.orange.hashCode),
+    //     Tag('1', 'Dairy', AppColors.yellow.hashCode),
+    //   ],
+    // ),
+    // Recipe(
+    //   id: '8888',
+    //   name: 'Fried pork with basil leaves',
+    //   ingredients: [
+    //     Ingredient(
+    //       name: 'Ingredient 1',
+    //       amount: 200,
+    //       unitId: '6268143ac5b8172fe1b1447e',
+    //     ),
+    //     Ingredient(
+    //       name: 'Ingredient 2',
+    //       amount: 50,
+    //       unitId: '6268143ac5b8172fe1b1447e',
+    //     ),
+    //     Ingredient(
+    //       name: 'Ingredient 3',
+    //       amount: 1000,
+    //       unitId: '6268143ac5b8172fe1b1447e',
+    //     ),
+    //   ],
+    //   steps: [
+    //     'step1 to do hello ',
+    //     'step2 to do hello world asdasdasd',
+    //     'step3 to do hello world',
+    //     'step4 to do hello world asdsdsadasdasd',
+    //     'step5 to do hello world asdasd',
+    //   ],
+    //   tagIds: [
+    //     Tag('4', 'Fresh', AppColors.green.hashCode),
+    //     Tag('3', 'Meat', AppColors.orange.hashCode),
+    //     Tag('2', 'Vagetable', AppColors.lightGreen.hashCode),
+    //   ],
+    // ),
+    // Recipe(
+    //   id: '7777',
+    //   name: 'Tom Yum Kung',
+    //   ingredients: [
+    //     Ingredient(
+    //       name: 'Ingredient 1',
+    //       amount: 200,
+    //       unitId: '6268143ac5b8172fe1b1447e',
+    //     ),
+    //     Ingredient(
+    //       name: 'Ingredient 2',
+    //       amount: 50,
+    //       unitId: '6268143ac5b8172fe1b1447e',
+    //     ),
+    //     Ingredient(
+    //       name: 'Ingredient 3',
+    //       amount: 1000,
+    //       unitId: '6268143ac5b8172fe1b1447e',
+    //     ),
+    //   ],
+    //   steps: [
+    //     'step1 to do hello ',
+    //     'step2 to do hello world asdasdasd',
+    //     'step3 to do hello world',
+    //     'step4 to do hello world asdsdsadasdasd',
+    //     'step5 to do hello world asdasd',
+    //   ],
+    //   tagIds: [
+    //     Tag('5', 'Dessert', AppColors.orange.hashCode),
+    //     Tag('1', 'Dairy', AppColors.yellow.hashCode),
+    //   ],
+    // ),
+    // Recipe(
+    //   id: '6666',
+    //   name: 'Japanese omelette',
+    //   ingredients: [
+    //     Ingredient(
+    //       name: 'Ingredient 1',
+    //       amount: 200,
+    //       unitId: '6268143ac5b8172fe1b1447e',
+    //     ),
+    //     Ingredient(
+    //       name: 'Ingredient 2',
+    //       amount: 50,
+    //       unitId: '6268143ac5b8172fe1b1447e',
+    //     ),
+    //     Ingredient(
+    //       name: 'Ingredient 3',
+    //       amount: 1000,
+    //       unitId: '6268143ac5b8172fe1b1447e',
+    //     ),
+    //   ],
+    //   steps: [
+    //     'step1 to do hello ',
+    //     'step2 to do hello world asdasdasd',
+    //     'step3 to do hello world',
+    //     'step4 to do hello world asdsdsadasdasd',
+    //     'step5 to do hello world asdasd',
+    //   ],
+    //   tagIds: [
+    //     Tag('4', 'Fresh', AppColors.green.hashCode),
+    //   ],
+    // ),
   ];
 
   List<Recipe> get items {
@@ -176,15 +177,43 @@ class Recipes with ChangeNotifier {
     return stars + items;
   }
 
+  void setRecipes(List<Map<String, dynamic>> items) {
+    try {
+      _items = items.map((item) {
+        return Recipe(
+          id: item['menu_id'],
+          name: item['menu_name'],
+          isPin: item['is_pin'],
+          steps: List<String>.from(item['steps']),
+          ingredients: List<Ingredient>.from(
+            (List<Map<String, dynamic>>.from(item['ingredients'])).map(
+              (e) => Ingredient(
+                name: e['ingredient_id'],
+                amount: e['count'].toDouble(),
+                unitId: e['unit_id'],
+              ),
+            ),
+          ),
+          tagIds: (List<Map<String, dynamic>>.from(item['tags']))
+              .map((e) => e['tag_id'] as String)
+              .toList(),
+        );
+      }).toList();
+      print('success!!');
+    } catch (e) {
+      print('e : $e');
+    }
+  }
+
   List<Recipe> search(String str, List<String> tags) {
     List<Recipe> searchItems = [..._items];
     if (tags.length > 0) {
       for (int i = 0; i < tags.length; i++) {
         searchItems = searchItems
             .where(
-              (item) => item.tags.any(
+              (item) => item.tagIds.any(
                 // (tag) => tags.contains(tag.id),
-                (tag) => tags[i] == tag.id,
+                (tag) => tags[i] == tag,
               ),
             )
             .toList();

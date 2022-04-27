@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/tags.dart';
+import 'package:fridchen_app/providers/unit.dart';
 import 'package:fridchen_app/themes/color.dart';
+import 'package:provider/provider.dart';
 
 class FridgeItem {
   final String? id;
   String name;
   double countLeft;
   double? min;
-  String unit;
+  Unit unit;
   DateTime? exp;
-  List<Tag> tags;
+  List<String> tagIds;
   bool isStar;
 
   FridgeItem({
@@ -19,7 +21,7 @@ class FridgeItem {
     required this.unit,
     this.min,
     this.exp,
-    this.tags = const [],
+    this.tagIds = const [],
     this.isStar = false,
   });
 }
@@ -31,12 +33,17 @@ class FridgeItems with ChangeNotifier {
       name: 'Milk',
       countLeft: 5,
       min: 10,
-      unit: 'Litre',
+      unit: Unit(
+        id: '62681408c5b8172fe1b14476',
+        name: 'Pieces',
+      ),
       isStar: true,
       exp: DateTime(2022, 2, 11),
-      tags: [
-        Tag('4', 'Fresh', AppColors.green.hashCode),
-        Tag('1', 'Dairy', AppColors.yellow.hashCode),
+      tagIds: [
+        // Tag('4', 'Fresh', AppColors.green.hashCode),
+        // Tag('1', 'Dairy', AppColors.yellow.hashCode),
+        '6267c066c1550ec4cddf83a4',
+        '6267c066c1550ec4cddf83a6'
       ],
     ),
     FridgeItem(
@@ -44,34 +51,33 @@ class FridgeItems with ChangeNotifier {
       name: 'Pork',
       countLeft: 200,
       min: 100,
-      unit: 'Grams',
+      unit: Unit(
+        id: '62681408c5b8172fe1b14476',
+        name: 'Pieces',
+      ),
       exp: DateTime(2022, 2, 13),
-      tags: [
-        Tag('3', 'Meat', AppColors.orange.hashCode),
-        Tag('2', 'Vagetable', AppColors.lightGreen.hashCode),
-        Tag('4', 'Fresh', AppColors.green.hashCode),
-      ],
+      tagIds: ['6267c066c1550ec4cddf83a6'],
     ),
-    FridgeItem(
-      id: '34567',
-      name: 'Bok Choy',
-      countLeft: 100,
-      unit: 'Grams',
-      exp: DateTime(2022, 2, 8),
-      tags: [
-        Tag('2', 'Vagetable', AppColors.lightGreen.hashCode),
-        Tag('4', 'Fresh', AppColors.green.hashCode),
-      ],
-    ),
-    FridgeItem(
-      id: '45678',
-      name: 'Kochujang',
-      countLeft: 1,
-      unit: 'Piece',
-      tags: [
-        Tag('5', 'Seasoning', AppColors.yellow.hashCode),
-      ],
-    ),
+    // FridgeItem(
+    //   id: '34567',
+    //   name: 'Bok Choy',
+    //   countLeft: 100,
+    //   unit: 'Grams',
+    //   exp: DateTime(2022, 2, 8),
+    //   tags: [
+    //     Tag('2', 'Vagetable', AppColors.lightGreen.hashCode),
+    //     Tag('4', 'Fresh', AppColors.green.hashCode),
+    //   ],
+    // ),
+    // FridgeItem(
+    //   id: '45678',
+    //   name: 'Kochujang',
+    //   countLeft: 1,
+    //   unit: 'Piece',
+    //   tags: [
+    //     Tag('5', 'Seasoning', AppColors.yellow.hashCode),
+    //   ],
+    // ),
   ];
 
   List<FridgeItem> get items {
@@ -94,9 +100,9 @@ class FridgeItems with ChangeNotifier {
       for (int i = 0; i < tags.length; i++) {
         searchItems = searchItems
             .where(
-              (item) => item.tags.any(
+              (item) => item.tagIds.any(
                 // (tag) => tags.contains(tag.id),
-                (tag) => tags[i] == tag.id,
+                (tag) => tags[i] == tag,
               ),
             )
             .toList();
@@ -111,6 +117,41 @@ class FridgeItems with ChangeNotifier {
     }
 
     return [...searchItems];
+  }
+
+  void setItem(List<Map<String, dynamic>> items) {
+    try {
+      _items = items.map((item) {
+        // print(item['ingredient_id'].runtimeType);
+        // print(item['ingredient_name']);
+        // print('min: ${item['min'].runtimeType}');
+        // print('count: ${item['cout_left'].runtimeType}');
+        // print('${item['unit_id'].runtimeType}');
+        // print('${item['unit_name'].runtimeType}');
+        // print('${item['is_star'].runtimeType}');
+        // print('------');
+        // return FridgeItem(
+        //     name: 'test', countLeft: 0, unit: Unit(id: '123', name: 'test'));
+        return FridgeItem(
+          id: item['ingredient_id'],
+          name: item['ingredient_name'],
+          min: item['min'] == null ? null : item['min'].toDouble(),
+          countLeft: item['cout_left'].toDouble(),
+          // countLeft: 11.0,
+          unit: Unit(id: item['unit_id'], name: item['unit_name']),
+          isStar: item['is_star'],
+          exp: item['exp'] != null ? DateTime.parse(item['exp']) : null,
+          tagIds: (List<Map<String, dynamic>>.from(item['tags']))
+              .map((e) => e['tag_id'] as String)
+              .toList(),
+          // tags: [],
+        );
+      }).toList();
+      print('success!!');
+      // final newItem = ;
+    } catch (e) {
+      print('e: $e');
+    }
   }
 
   Future<void> setStar(String id) async {

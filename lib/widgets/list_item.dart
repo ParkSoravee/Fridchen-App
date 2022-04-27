@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fridchen_app/providers/tags.dart';
 import 'package:fridchen_app/screens/bottomsheets/fridge_new_item.dart';
 import 'package:fridchen_app/widgets/dialog_confirm.dart';
 import 'package:fridchen_app/widgets/tag_list.dart';
@@ -199,7 +200,9 @@ class _ListListItemState extends State<ListListItem> {
                     Row(
                       children: [
                         Expanded(
-                          child: TagList(tags: widget.item.tags),
+                          child: TagList(
+                              tags: Provider.of<Tags>(context)
+                                  .getTagsById(widget.item.tagIds)),
                         ),
                       ],
                     ),

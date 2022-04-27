@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/recipes.dart';
 import 'package:fridchen_app/widgets/row_with_title.dart';
+import 'package:provider/provider.dart';
 
 import '../providers/unit.dart';
 import '../themes/color.dart';
@@ -35,7 +36,8 @@ class _DialogRecipeNewIngredientState extends State<DialogRecipeNewIngredient> {
     final ing = Ingredient(
       name: _name!,
       amount: _amount!,
-      unit: _selectedUnit!,
+      unitId: Provider.of<Units>(context, listen: false)
+          .getIdByName(_selectedUnit!),
     );
     widget.setIngredient(ing);
     Navigator.pop(context);

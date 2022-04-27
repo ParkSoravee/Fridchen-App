@@ -123,9 +123,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
       _volumnController.text = widget.item!.countLeft.toString();
       _minController.text =
           widget.item == null ? '' : widget.item!.min.toString();
-      _tagsId = widget.item!.tags.map((e) {
-        return e.id;
-      }).toList();
+      _tagsId = widget.item!.tagIds;
       // print(_tagsId);
       _selectedUnit = widget.item!.unit.name;
       _exp = widget.item!.exp;

@@ -66,28 +66,28 @@ class Api with ChangeNotifier {
 
   // * Fridge
   Future<void> addFridgeItem(
+    String familyId,
     FridgeItem item,
   ) async {
     final url = Uri.parse(
-      '$api_url/fridge/add?userid=$userId',
+      '$api_url/fridge_item/add_fridge_item',
     );
     try {
       final res = await http.post(
         url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
         body: json.encode({
+          'family_id': familyId,
           'name': item.name,
-          'countLeft': item.countLeft,
-          'unit': item.unit,
+          'count': item.countLeft,
+          'unit_id': item.unit.id,
           'min': item.min,
-          'exp': item.exp == null ? null : item.exp!.toIso8601String(),
-          'tags': item.tags
-              .map((e) => {
-                    'id': e.id,
-                    'name': e.name,
-                    'colorCode': e.colorCode,
-                  })
-              .toList(),
-          'isStar': item.isStar,
+          'exp': item.exp == null
+              ? null
+              : item.exp!.toIso8601String(), // TODO: smart
+          'tags': item.tagIds,
         }),
       );
     } catch (e) {
@@ -96,30 +96,22 @@ class Api with ChangeNotifier {
     }
   }
 
-  Future<void> updateFridgeItem(
+  Future<void> consumeFridgeItem(
+    String familyId,
     FridgeItem item,
+    double consume,
   ) async {
     final url = Uri.parse(
-      '$api_url/fridge/update?userid=$userId',
+      '$api_url/fridge_item/family_id/$familyId/ingredient_id/${item.id}',
     );
     try {
-      final res = await http.post(
+      final res = await http.patch(
         url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
         body: json.encode({
-          'id': item.id,
-          'name': item.name,
-          'countLeft': item.countLeft,
-          'unit': item.unit,
-          'min': item.min,
-          'exp': item.exp == null ? null : item.exp!.toIso8601String(),
-          'tags': item.tags
-              .map((e) => {
-                    'id': e.id,
-                    'name': e.name,
-                    'colorCode': e.colorCode,
-                  })
-              .toList(),
-          'isStar': item.isStar,
+          'cout_left': item.countLeft - consume,
         }),
       );
     } catch (e) {
@@ -129,17 +121,15 @@ class Api with ChangeNotifier {
   }
 
   Future<void> deleteFridgeItem(
+    String familyId,
     FridgeItem item,
   ) async {
     final url = Uri.parse(
-      '$api_url/fridge/delete?userid=$userId',
+      '$api_url/fridge_item/family_id/$familyId/ingredient_id/${item.id}',
     );
     try {
       final res = await http.delete(
         url,
-        body: json.encode({
-          'id': item.id,
-        }),
       );
     } catch (e) {
       print(e);
@@ -149,32 +139,35 @@ class Api with ChangeNotifier {
 
   // * Recipe -----------------
   Future<void> addRecipeItem(
+    String familyId,
     Recipe item,
   ) async {
     final url = Uri.parse(
-      '$api_url/recipe/add?userid=$userId',
+      '$api_url/menu/create_menu',
     );
     try {
       final res = await http.post(
         url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
         body: json.encode({
+          'family_id': familyId,
           'name': item.name,
           'ingredients': item.ingredients
               .map((e) => {
                     'name': e.name,
-                    'amount': e.amount,
-                    'unit': e.unit,
+                    'count': e.amount,
+                    'unit_id': e.unitId,
                   })
               .toList(),
-          'steps': item.steps.map((step) => step).toList(),
-          'tags': item.tags
-              .map((e) => {
-                    'id': e.id,
-                    'name': e.name,
-                    'colorCode': e.colorCode,
-                  })
+          'steps': item.steps,
+          'tags': item.tagIds
+              .map(
+                (e) => e,
+              )
               .toList(),
-          'isPin': item.isPin,
+          // 'isPin': item.isPin,
         }),
       );
     } catch (e) {
@@ -184,6 +177,7 @@ class Api with ChangeNotifier {
   }
 
   Future<void> updateRecipeItem(
+    // TODO: smart
     Recipe item,
   ) async {
     final url = Uri.parse(
@@ -192,6 +186,9 @@ class Api with ChangeNotifier {
     try {
       final res = await http.post(
         url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
         body: json.encode({
           'id': item.id,
           'name': item.name,
@@ -199,17 +196,17 @@ class Api with ChangeNotifier {
               .map((e) => {
                     'name': e.name,
                     'amount': e.amount,
-                    'unit': e.unit,
+                    'unit': e.unitId,
                   })
               .toList(),
           'steps': item.steps.map((step) => step).toList(),
-          'tags': item.tags
-              .map((e) => {
-                    'id': e.id,
-                    'name': e.name,
-                    'colorCode': e.colorCode,
-                  })
-              .toList(),
+          // 'tags': item.tagIds
+          //     .map((e) => {
+          //           'id': e.id,
+          //           'name': e.name,
+          //           'colorCode': e.colorCode,
+          //         })
+          //     .toList(),
           'isPin': item.isPin,
         }),
       );
@@ -247,6 +244,9 @@ class Api with ChangeNotifier {
     try {
       final res = await http.post(
         url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
         body: json.encode({
           'id': item.id,
           'isPin': item.isPin,
@@ -268,16 +268,13 @@ class Api with ChangeNotifier {
     try {
       final res = await http.post(
         url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
         body: json.encode({
           'name': item.name,
-          'tags': item.tags
-              .map((e) => {
-                    'id': e.id,
-                    'name': e.name,
-                    'colorCode': e.colorCode,
-                  })
-              .toList(),
-          'isTick': item.isTick
+          'tags': item.tagIds,
+          'isTick': item.isTick,
         }),
       );
     } catch (e) {
@@ -295,6 +292,9 @@ class Api with ChangeNotifier {
     try {
       final res = await http.post(
         url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
         body: json.encode({
           'id': item.id,
           'isTick': item.isTick,
