@@ -69,6 +69,7 @@ class Api with ChangeNotifier {
     String familyId,
     FridgeItem item,
   ) async {
+    print('adding fridge item...');
     final url = Uri.parse(
       '$api_url/fridge_item/add_fridge_item',
     );
@@ -82,11 +83,40 @@ class Api with ChangeNotifier {
           'family_id': familyId,
           'name': item.name,
           'count': item.countLeft,
-          'unit_id': item.unit.id,
-          'min': item.min,
-          'exp': item.exp == null
-              ? null
-              : item.exp!.toIso8601String(), // TODO: smart
+          'unit_id': item.unitIds,
+          'min': item.min ?? 0,
+          'exp': item.exp == null ? null : item.exp!.toIso8601String(),
+          'tags': item.tagIds,
+        }),
+      );
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
+
+  Future<void> editFridgeItem(
+    // TODO: smart
+    String familyId,
+    FridgeItem item,
+  ) async {
+    print('editing fridge item...');
+    final url = Uri.parse(
+      '$api_url/fridge_item/add_fridge_item',
+    );
+    try {
+      final res = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode({
+          'family_id': familyId,
+          'name': item.name,
+          'count': item.countLeft,
+          'unit_id': item.unitIds,
+          'min': item.min ?? 0,
+          'exp': item.exp == null ? null : item.exp!.toIso8601String(),
           'tags': item.tagIds,
         }),
       );
@@ -112,6 +142,57 @@ class Api with ChangeNotifier {
         },
         body: json.encode({
           'cout_left': item.countLeft - consume,
+        }),
+      );
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
+
+  Future<void> setExpFridgeItem(
+    String familyId,
+    FridgeItem item,
+    DateTime exp,
+  ) async {
+    final url = Uri.parse(
+      '$api_url/fridge_item/family_id/$familyId/ingredient_id/${item.id}',
+    );
+    try {
+      final res = await http.patch(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode({
+          'exp': exp.toIso8601String(),
+        }),
+      );
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
+
+  Future<void> setStarFridgeItem(
+    String familyId,
+    FridgeItem item,
+  ) async {
+    final url = Uri.parse(
+      '$api_url/family_ingredient/set_is_star',
+    );
+    try {
+      final res = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode({
+          {
+            "family_id": familyId,
+            "ingredient_id": item.id,
+            "is_star": !item.isStar,
+          }
         }),
       );
     } catch (e) {
@@ -260,10 +341,12 @@ class Api with ChangeNotifier {
 
   // * List -----------------
   Future<void> addListItem(
+    String familyId,
     ListItem item,
   ) async {
+    print('adding shopping list');
     final url = Uri.parse(
-      '$api_url/list/add?userid=$userId',
+      '$api_url/shopping_list/add_shopping_list',
     );
     try {
       final res = await http.post(
@@ -273,8 +356,8 @@ class Api with ChangeNotifier {
         },
         body: json.encode({
           'name': item.name,
-          'tags': item.tagIds,
-          'isTick': item.isTick,
+          'tag_ids': item.tagIds,
+          'family_id': familyId,
         }),
       );
     } catch (e) {

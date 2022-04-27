@@ -121,19 +121,19 @@ class _MyHomePageState extends State<MyHomePage> {
       // set fridge item
       final fridgeItems = List<Map<String, dynamic>>.from(
           extractedData['data']['fridge_items']);
-      print('fridge items:\n ${fridgeItems.length} $fridgeItems');
+      // print('fridge items:\n ${fridgeItems.length} $fridgeItems');
       Provider.of<FridgeItems>(context, listen: false).setItem(fridgeItems);
 
       // set recipe
       final recipeItems =
           List<Map<String, dynamic>>.from(extractedData['data']['menus']);
-      print('recipe items:\n  ${recipeItems.length} $recipeItems');
+      // print('recipe items:\n  ${recipeItems.length} $recipeItems');
       Provider.of<Recipes>(context, listen: false).setRecipes(recipeItems);
 
       // set shopping list
       final listItems = List<Map<String, dynamic>>.from(
           extractedData['data']['shopping_lists']);
-      print('list items:\n  ${listItems.length} $listItems');
+      // print('list items:\n  ${listItems.length} $listItems');
       Provider.of<ListItems>(context, listen: false).setListItem(listItems);
 
       // * ------------------

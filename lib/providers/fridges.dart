@@ -9,7 +9,7 @@ class FridgeItem {
   String name;
   double countLeft;
   double? min;
-  Unit unit;
+  String unitIds;
   DateTime? exp;
   List<String> tagIds;
   bool isStar;
@@ -18,7 +18,7 @@ class FridgeItem {
     this.id,
     required this.name,
     required this.countLeft,
-    required this.unit,
+    required this.unitIds,
     this.min,
     this.exp,
     this.tagIds = const [],
@@ -28,36 +28,36 @@ class FridgeItem {
 
 class FridgeItems with ChangeNotifier {
   List<FridgeItem> _items = [
-    FridgeItem(
-      id: '12345',
-      name: 'Milk',
-      countLeft: 5,
-      min: 10,
-      unit: Unit(
-        id: '62681408c5b8172fe1b14476',
-        name: 'Pieces',
-      ),
-      isStar: true,
-      exp: DateTime(2022, 2, 11),
-      tagIds: [
-        // Tag('4', 'Fresh', AppColors.green.hashCode),
-        // Tag('1', 'Dairy', AppColors.yellow.hashCode),
-        '6267c066c1550ec4cddf83a4',
-        '6267c066c1550ec4cddf83a6'
-      ],
-    ),
-    FridgeItem(
-      id: '23456',
-      name: 'Pork',
-      countLeft: 200,
-      min: 100,
-      unit: Unit(
-        id: '62681408c5b8172fe1b14476',
-        name: 'Pieces',
-      ),
-      exp: DateTime(2022, 2, 13),
-      tagIds: ['6267c066c1550ec4cddf83a6'],
-    ),
+    // FridgeItem(
+    //   id: '12345',
+    //   name: 'Milk',
+    //   countLeft: 5,
+    //   min: 10,
+    //   unit: Unit(
+    //     id: '62681408c5b8172fe1b14476',
+    //     name: 'Pieces',
+    //   ),
+    //   isStar: true,
+    //   exp: DateTime(2022, 2, 11),
+    //   tagIds: [
+    //     // Tag('4', 'Fresh', AppColors.green.hashCode),
+    //     // Tag('1', 'Dairy', AppColors.yellow.hashCode),
+    //     '6267c066c1550ec4cddf83a4',
+    //     '6267c066c1550ec4cddf83a6'
+    //   ],
+    // ),
+    // FridgeItem(
+    //   id: '23456',
+    //   name: 'Pork',
+    //   countLeft: 200,
+    //   min: 100,
+    //   unit: Unit(
+    //     id: '62681408c5b8172fe1b14476',
+    //     name: 'Pieces',
+    //   ),
+    //   exp: DateTime(2022, 2, 13),
+    //   tagIds: ['6267c066c1550ec4cddf83a6'],
+    // ),
     // FridgeItem(
     //   id: '34567',
     //   name: 'Bok Choy',
@@ -138,7 +138,7 @@ class FridgeItems with ChangeNotifier {
           min: item['min'] == null ? null : item['min'].toDouble(),
           countLeft: item['cout_left'].toDouble(),
           // countLeft: 11.0,
-          unit: Unit(id: item['unit_id'], name: item['unit_name']),
+          unitIds: item['unit_id'],
           isStar: item['is_star'],
           exp: item['exp'] != null ? DateTime.parse(item['exp']) : null,
           tagIds: (List<Map<String, dynamic>>.from(item['tags']))
@@ -220,7 +220,7 @@ class FridgeItems with ChangeNotifier {
           id: item.id,
           name: item.name,
           countLeft: double.parse((item.countLeft - amount).toStringAsFixed(2)),
-          unit: item.unit,
+          unitIds: item.unitIds,
         );
         print(
             'update left: ${double.parse((item.countLeft - amount).toStringAsFixed(2))}');

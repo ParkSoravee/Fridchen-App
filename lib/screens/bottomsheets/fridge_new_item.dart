@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fridchen_app/providers/api.dart';
+import 'package:fridchen_app/providers/auth.dart';
+import 'package:fridchen_app/providers/family.dart';
 import 'package:fridchen_app/providers/fridges.dart';
 import 'package:fridchen_app/providers/unit.dart';
 import 'package:fridchen_app/themes/color.dart';
@@ -64,7 +67,7 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
     }
   }
 
-  void submitForm() {
+  Future<void> submitForm() async {
     // print('confirm');
     final isValid = _form.currentState!.validate();
     if (!isValid) {
@@ -72,11 +75,6 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
     }
     _form.currentState!.save();
 
-    // get tags
-    final _tags =
-        Provider.of<Tags>(context, listen: false).getTagsById(_tagsId);
-
-    // print(_id);
     print(_name);
     print(_exp.toString());
     print(_volume);
@@ -84,26 +82,35 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
     print(_min);
     print(_tagsId.toString());
 
-    // final fridgeItem = FridgeItem(
-    //   // TODO : delete id here
-    //   name: _name!,
-    //   exp: _exp,
-    //   countLeft: _volume!,
-    //   unit: _selectedUnit!,
-    //   tags: _tags,
-    // );
+    final fridgeItem = FridgeItem(
+      name: _name!,
+      exp: _exp,
+      countLeft: _volume!,
+      unitIds: _selectedUnit!,
+      tagIds: _tagsId,
+      min: _min,
+    );
     try {
-      // TODO API: new or edit
-      // Provider.of<FridgeItems>(context, listen: false).addNewItem(fridgeItem);
+      final familyId =
+          Provider.of<Families>(context, listen: false).currentFamilyId;
+      if (widget.item == null) {
+        await Provider.of<Api>(context, listen: false)
+            .addFridgeItem(familyId, fridgeItem);
+      } else {
+        await Provider.of<Api>(context, listen: false)
+            .editFridgeItem(familyId, fridgeItem);
+      }
       if (widget.setIsComfirm != null) widget.setIsComfirm!();
       Navigator.pop(context);
       // TODO vvv
       // widget.showSavedConfirm(_name);
     } catch (e) {
+      print(e);
       showDialog(
         context: context,
         builder: (ctx) => DialogAlert(
           title: 'Please connect the internet.',
+          // title: e.toString(),
           smallTitle: true,
           primaryColor: AppColors.white,
           backgroundColor: AppColors.red,
@@ -125,7 +132,8 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
           widget.item == null ? '' : widget.item!.min.toString();
       _tagsId = widget.item!.tagIds;
       // print(_tagsId);
-      _selectedUnit = widget.item!.unit.name;
+      _selectedUnit = Provider.of<Units>(context, listen: false)
+          .getNameById(widget.item!.unitIds);
       _exp = widget.item!.exp;
     }
     super.initState();
@@ -293,7 +301,8 @@ class _FridgeNewItemState extends State<FridgeNewItem> {
                         fontSize: 20,
                       ),
                     ),
-                    items: Units().getDropdownMenuItem(20, AppColors.darkGreen),
+                    items: Provider.of<Units>(context, listen: false)
+                        .getDropdownMenuItem(20, AppColors.darkGreen),
                     onChanged: (value) {
                       setState(() {
                         _selectedUnit = value.toString();

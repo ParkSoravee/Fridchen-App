@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fridchen_app/providers/fridges.dart';
+import 'package:fridchen_app/providers/unit.dart';
+import 'package:provider/provider.dart';
 
 import '../themes/color.dart';
 import 'dialog_confirm.dart';
@@ -81,16 +83,15 @@ class _DialogConsumeState extends State<DialogConsume> {
                   ),
                   textInputAction: TextInputAction.done,
                   validator: (value) {
-                    if (value == null ||
-                        value.isEmpty ||
-                        double.parse(value) <= 0) {
+                    if (value == null || value.isEmpty) {
                       return 'Please enter amount';
                     }
-                    if (double.tryParse(value) == null) {
-                      return 'Invalid amount.';
+                    if (double.tryParse(value) == null ||
+                        double.parse(value) <= 0) {
+                      return 'Invalid consume.';
                     }
                     if (double.parse(value) > 10000) {
-                      return 'Invalid amount.';
+                      return 'Invalid consume.';
                     }
                     return null;
                   },
@@ -103,7 +104,8 @@ class _DialogConsumeState extends State<DialogConsume> {
                 width: 10,
               ),
               Text(
-                widget.item.unit.name,
+                Provider.of<Units>(context, listen: false)
+                    .getNameById(widget.item.unitIds),
                 style: TextStyle(
                   color: AppColors.darkGreen,
                   fontSize: 25,

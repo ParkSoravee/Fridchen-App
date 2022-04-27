@@ -43,8 +43,6 @@ class Units with ChangeNotifier {
     ),
   ];
 
-  Units();
-
   List<Unit> get items {
     return [..._items];
   }

@@ -57,9 +57,9 @@ class MyApp extends StatelessWidget {
             authToken: auth.token,
           ),
           create: (_) => Api(
-            userId: Provider.of<Auth>(context, listen: false).userId,
-            authToken: Provider.of<Auth>(context, listen: false).token,
-          ),
+              // userId: Provider.of<Auth>(context, listen: false).userId,
+              // authToken: Provider.of<Auth>(context, listen: false).token,
+              ),
         ),
         ChangeNotifierProvider(
           create: (ctx) => Families(),

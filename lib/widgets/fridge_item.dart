@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fridchen_app/providers/api.dart';
 import 'package:fridchen_app/providers/list.dart';
+import 'package:fridchen_app/providers/unit.dart';
 import 'package:fridchen_app/utils/date.dart';
 import 'package:fridchen_app/widgets/dialog_confirm.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +13,7 @@ import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/widgets/tag_list.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/family.dart';
 import '../providers/tags.dart';
 import '../screens/bottomsheets/fridge_new_item.dart';
 import 'dialog_consume.dart';
@@ -30,11 +33,14 @@ class _FridgeListItemState extends State<FridgeListItem> {
       final date = await MyDateUtils.setExpDate(
           context: context, title: widget.item.name);
       if (date != null) {
-        Provider.of<FridgeItems>(context, listen: false)
-            .setExp(widget.item.id!, date);
+        final familyId =
+            Provider.of<Families>(context, listen: false).currentFamilyId;
+        await Provider.of<Api>(context, listen: false)
+            .setExpFridgeItem(familyId, widget.item, date);
       }
       // TODO: bottom success
     } catch (e) {
+      print(e);
       // TODO: bottom error
     }
   }
@@ -86,8 +92,10 @@ class _FridgeListItemState extends State<FridgeListItem> {
     if (!isConfirm) return;
 
     try {
-      await Provider.of<FridgeItems>(context, listen: false)
-          .setStar(widget.item.id!);
+      final familyId =
+          Provider.of<Families>(context, listen: false).currentFamilyId;
+      await Provider.of<Api>(context, listen: false)
+          .setStarFridgeItem(familyId, widget.item);
       // TODO: bottom success
     } catch (e) {
       // TODO: bottom error
@@ -96,8 +104,15 @@ class _FridgeListItemState extends State<FridgeListItem> {
 
   Future<void> addToList() async {
     try {
-      // Provider.of<ListItems>(context, listen: false)
-      //     .addNewItem(widget.item.name, widget.item.tagIds);
+      final familyId =
+          Provider.of<Families>(context, listen: false).currentFamilyId;
+      await Provider.of<Api>(context, listen: false).addListItem(
+        familyId,
+        ListItem(
+          name: widget.item.name,
+          tagIds: widget.item.tagIds,
+        ),
+      );
       // TODO: bottom success
     } catch (e) {
       // TODO: bottom error
@@ -135,8 +150,10 @@ class _FridgeListItemState extends State<FridgeListItem> {
     if (!isConfirm) return;
 
     try {
-      Provider.of<FridgeItems>(context, listen: false)
-          .deleteItem(widget.item.id!);
+      final familyId =
+          Provider.of<Families>(context, listen: false).currentFamilyId;
+      await Provider.of<Api>(context, listen: false)
+          .deleteFridgeItem(familyId, widget.item);
       // TODO: bottom success
     } catch (e) {
       // TODO: bottom error
@@ -159,8 +176,10 @@ class _FridgeListItemState extends State<FridgeListItem> {
     if (!isConfirm) return;
 
     try {
-      Provider.of<FridgeItems>(context, listen: false)
-          .consumeItem(widget.item.id!, amount);
+      final familyId =
+          Provider.of<Families>(context, listen: false).currentFamilyId;
+      await Provider.of<Api>(context, listen: false)
+          .consumeFridgeItem(familyId, widget.item, amount);
       // TODO: bottom success
     } catch (e) {
       // TODO: bottom error
@@ -290,14 +309,14 @@ class _FridgeListItemState extends State<FridgeListItem> {
                   children: [
                     Expanded(
                       child: TagList(
-                          tags: Provider.of<Tags>(context)
+                          tags: Provider.of<Tags>(context, listen: false)
                               .getTagsById(widget.item.tagIds)),
                     ),
                     SizedBox(
                       width: 8,
                     ),
                     Text(
-                      '${(widget.item.countLeft % 1 == 0) ? widget.item.countLeft.toStringAsFixed(0) : widget.item.countLeft} ${widget.item.unit.name}',
+                      '${(widget.item.countLeft % 1 == 0) ? widget.item.countLeft.toStringAsFixed(0) : widget.item.countLeft} ${Provider.of<Units>(context, listen: false).getNameById(widget.item.unitIds)}',
                       style: TextStyle(
                         color: AppColors.white,
                         fontSize: 24,

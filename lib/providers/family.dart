@@ -19,29 +19,7 @@ import 'package:http/http.dart' as http;
 // }
 
 class Families with ChangeNotifier {
-  List<String> _families = [
-    // Family(
-    //   id: '123456',
-    //   name: 'Home1',
-    //   menus: [
-    //     {'id': '1234', 'isPin': true},
-    //   ],
-    // ),
-    // Family(
-    //   id: '234567',
-    //   name: 'Home2',
-    //   menus: [
-    //     {'id': '2345', 'isPin': true},
-    //   ],
-    // ),
-    // Family(
-    //   id: '345678',
-    //   name: 'Home3',
-    //   menus: [
-    //     {'id': '3456', 'isPin': true},
-    //   ],
-    // ),
-  ];
+  List<String> _families = [];
 
   int _currentFamilyIndex = 0;
 
@@ -55,6 +33,10 @@ class Families with ChangeNotifier {
 
   int get currentFamilyIndex {
     return _currentFamilyIndex;
+  }
+
+  String get currentFamilyId {
+    return _families[_currentFamilyIndex];
   }
 
   void setCurrentFamily(int index) {
