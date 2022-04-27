@@ -24,6 +24,7 @@ class TemplateScreen extends StatelessWidget {
       body: Container(
         margin: EdgeInsets.only(
           top: MediaQuery.of(context).padding.top,
+          // top: 40,
         ),
         child: Stack(
           children: [
@@ -32,6 +33,7 @@ class TemplateScreen extends StatelessWidget {
               top: 47,
               child: Text(
                 title,
+                textScaleFactor: 1,
                 style: TextStyle(
                   fontSize: 100,
                   color: AppColors.darkGreen,

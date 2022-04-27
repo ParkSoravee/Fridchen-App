@@ -6,9 +6,13 @@ import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 import '../screens/qrcode/join_family_screen.dart';
 import '../themes/color.dart';
+import 'dialog_new_fridchen.dart';
 
 class HomeDrawer extends StatefulWidget {
-  const HomeDrawer({Key? key}) : super(key: key);
+  final Function(String) addNewFridchen;
+  final Function(String) joinFamily;
+
+  const HomeDrawer(this.addNewFridchen, this.joinFamily);
 
   @override
   State<HomeDrawer> createState() => _HomeDrawerState();
@@ -17,13 +21,29 @@ class HomeDrawer extends StatefulWidget {
 class _HomeDrawerState extends State<HomeDrawer> {
   bool _lights = false;
 
-  Future<void> logout() async {
+  Future<void> _logout() async {
     await Provider.of<Auth>(context, listen: false).logout();
   }
 
-  Future<void> leaveFamily() async {
+  Future<void> _leaveFamily() async {
     final userId = Provider.of<Auth>(context, listen: false).userId!;
     await Provider.of<Families>(context, listen: false).leaveFamily(userId);
+  }
+
+  void _joinFamily() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => JoinFamilyScreen(widget.joinFamily),
+      ),
+    );
+  }
+
+  void _addNewFridchenDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => DialogNewFridchen(widget.addNewFridchen),
+    );
   }
 
   @override
@@ -99,7 +119,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           fontSize: 26,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: _joinFamily,
                     ),
                     TextButton(
                       child: Text(
@@ -109,7 +129,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           fontSize: 26,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: _addNewFridchenDialog,
                     ),
                     SizedBox(
                       height: 10,
@@ -132,7 +152,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           fontFamily: "BebasNeue",
                         ),
                       ),
-                      onPressed: leaveFamily,
+                      onPressed: _leaveFamily,
                     ),
                   ],
                 ),
@@ -194,7 +214,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      onPressed: logout,
+                      onPressed: _logout,
                     ),
                   ],
                 ),

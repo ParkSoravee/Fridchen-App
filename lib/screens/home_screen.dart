@@ -54,7 +54,29 @@ class _MyHomePageState extends State<MyHomePage> {
       await Provider.of<Families>(context, listen: false)
           .fetchAndSetFamily(widget.userId);
       _index += 1;
-      Provider.of<Families>(context, listen: false).setCurrentFamily(_index);
+      // Provider.of<Families>(context, listen: false).setCurrentFamily(_index);
+      await getAllData();
+      // TODO call bottom success
+    } catch (e) {
+      print(e);
+      // setState(() {
+      //   _isLoading = false;
+      // });
+      // TODO call bottom error
+    }
+  }
+
+  Future<void> joinFamily(String familyId) async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      await Provider.of<Families>(context, listen: false)
+          .joinFamily(widget.userId, familyId);
+      await Provider.of<Families>(context, listen: false)
+          .fetchAndSetFamily(widget.userId);
+      _index += 1;
+      // Provider.of<Families>(context, listen: false).setCurrentFamily(_index);
       await getAllData();
       // TODO call bottom success
     } catch (e) {
@@ -122,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
         data: Theme.of(context).copyWith(
           canvasColor: AppColors.green,
         ),
-        child: HomeDrawer(),
+        child: HomeDrawer(addNewFridchen, joinFamily),
       ),
       backgroundColor: AppColors.lightGreen,
       body: (_isLoading && !_isInit)
@@ -273,6 +295,7 @@ class FamilySelect extends StatelessWidget {
                     child: FittedBox(
                       child: Text(
                         familyName,
+                        textScaleFactor: 1,
                         style: TextStyle(
                           fontSize: 65,
                           color: AppColors.darkGreen,

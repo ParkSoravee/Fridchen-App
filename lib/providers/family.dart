@@ -116,6 +116,35 @@ class Families with ChangeNotifier {
     }
   }
 
+  Future<void> joinFamily(
+    String userId,
+    String familyId,
+  ) async {
+    try {
+      print('joining family...');
+      final api_url = dotenv.env['BACKEND_URL'];
+      final url = Uri.parse(
+        '$api_url/user/join/$familyId',
+      );
+
+      final res = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode(<String, String>{
+          "user_id": userId,
+        }),
+      );
+      final extractedData = (json.decode(res.body) as Map<String, dynamic>);
+      // print(extractedData);
+      _families = List<String>.from(extractedData['data']['family_ids']);
+      _currentFamilyIndex = _families.length - 1;
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> leaveFamily(String userId) async {
     final familyId = _families[_currentFamilyIndex];
     try {
