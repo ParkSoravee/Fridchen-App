@@ -403,6 +403,31 @@ class Api with ChangeNotifier {
     }
   }
 
+  Future<void> shareRecipe(
+    String familyId,
+    String menuId,
+  ) async {
+    print('sharing recipe');
+    final url = Uri.parse(
+      '$api_url/menu/share',
+    );
+    try {
+      final res = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: json.encode({
+          "family_id": familyId,
+          "menu_id": menuId,
+        }),
+      );
+    } catch (e) {
+      print(e);
+      throw e;
+    }
+  }
+
   Future<String> checkIngredientId(String name) async {
     print('checking ingredient name');
     final url = Uri.parse(

@@ -51,10 +51,18 @@ class _ListNewItemState extends State<ListNewItem> {
       Navigator.pop(context);
 
       // TODO : snackbar success
-
+      AppSnackBar().build(
+        context: context,
+        text: 'Add new item successfully!',
+        color: AppColors.yellow,
+      );
     } catch (e) {
       print(e);
-
+      AppSnackBar().build(
+        context: context,
+        text: 'Add new item successfully!',
+        isError: true,
+      );
       // TODO : snackbar error
     }
   }

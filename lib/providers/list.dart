@@ -78,6 +78,7 @@ class ListItems with ChangeNotifier {
         return ListItem(
           id: item['ingredient_id'],
           name: item['ingredient_name'],
+          isTick: item['is_bought'],
           tagIds: (List<Map<String, dynamic>>.from(item['tags']))
               .map((e) => e['tag_id'] as String)
               .toList(),

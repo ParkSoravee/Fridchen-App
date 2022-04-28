@@ -8,6 +8,7 @@ class TemplateScreen extends StatelessWidget {
   final Color secondaryColor;
   final Widget child;
   final Function? addNew;
+  final Function()? addRecipe;
 
   const TemplateScreen({
     required this.title,
@@ -15,6 +16,7 @@ class TemplateScreen extends StatelessWidget {
     required this.secondaryColor,
     required this.child,
     this.addNew,
+    this.addRecipe,
   });
 
   @override
@@ -31,13 +33,29 @@ class TemplateScreen extends StatelessWidget {
             Positioned(
               left: 18,
               top: 47,
-              child: Text(
-                title,
-                textScaleFactor: 1,
-                style: TextStyle(
-                  fontSize: 100,
-                  color: AppColors.darkGreen,
-                ),
+              child: Row(
+                children: [
+                  Text(
+                    title,
+                    textScaleFactor: 1,
+                    style: TextStyle(
+                      fontSize: 100,
+                      color: AppColors.darkGreen,
+                    ),
+                  ),
+                  if (addRecipe != null)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 14, bottom: 10),
+                      child: InkWell(
+                        onTap: addRecipe,
+                        child: Icon(
+                          Icons.qr_code_scanner_rounded,
+                          size: 50,
+                          color: AppColors.darkGreen,
+                        ),
+                      ),
+                    ),
+                ],
               ),
             ),
             Column(

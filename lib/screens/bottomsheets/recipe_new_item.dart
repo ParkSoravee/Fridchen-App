@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fridchen_app/screens/qrcode/share_menu_screen.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:fridchen_app/widgets/bottom_sheet_template.dart';
 import 'package:fridchen_app/widgets/dialog_recipe_new_ingredient.dart';
@@ -130,6 +131,15 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
     }
   }
 
+  void shareMenu() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ShareMenuScreen(widget.item!.id!),
+      ),
+    );
+  }
+
   Future<void> addNewIngredient() async {
     await showDialog(
       context: context,
@@ -182,7 +192,7 @@ class _RecipeNewItemState extends State<RecipeNewItem> {
   @override
   Widget build(BuildContext context) {
     return BottomSheetTemplate(
-      showQr: (widget.item == null || widget.onEdit) ? false : true,
+      showQr: (widget.item == null || widget.onEdit) ? null : shareMenu,
       title: (widget.item == null || widget.onEdit)
           ? widget.onEdit
               ? 'Edit recipe'

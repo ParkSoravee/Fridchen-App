@@ -9,7 +9,7 @@ class BottomSheetTemplate extends StatelessWidget {
   final Widget child;
   final Function() submitForm;
   final bool isShort;
-  final bool showQr;
+  final Function()? showQr;
   final String confirmText;
   final String cancelText;
 
@@ -20,7 +20,7 @@ class BottomSheetTemplate extends StatelessWidget {
     required this.child,
     required this.submitForm,
     this.isShort = false,
-    this.showQr = false,
+    this.showQr,
     this.confirmText = 'Confirm',
     this.cancelText = 'Cancel',
   }) : super(key: key);
@@ -72,13 +72,16 @@ class BottomSheetTemplate extends StatelessWidget {
                       fontFamily: 'BebasNeue',
                     ),
                   ),
-                  if (showQr)
+                  if (showQr != null)
                     WidgetSpan(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 0, 5),
-                        child: Icon(
-                          Icons.qr_code_scanner_rounded,
-                          size: 40,
+                      child: InkWell(
+                        onTap: showQr,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 0, 0, 5),
+                          child: Icon(
+                            Icons.qr_code_scanner_rounded,
+                            size: 40,
+                          ),
                         ),
                       ),
                     )

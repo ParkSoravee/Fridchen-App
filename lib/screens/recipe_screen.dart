@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fridchen_app/providers/api.dart';
+import 'package:fridchen_app/providers/family.dart';
 import 'package:fridchen_app/screens/bottomsheets/recipe_new_item.dart';
+import 'package:fridchen_app/screens/qrcode/share_recipe.dart';
 import 'package:fridchen_app/screens/template_screen.dart';
 import 'package:fridchen_app/themes/color.dart';
 import 'package:provider/provider.dart';
@@ -55,6 +58,22 @@ class _RecipeScreenState extends State<RecipeScreen> {
     );
   }
 
+  Future<void> recieveFunction(String menuId) async {
+    final familyId =
+        Provider.of<Families>(context, listen: false).currentFamilyId;
+    await Provider.of<Api>(context, listen: false)
+        .shareRecipe(familyId, menuId);
+  }
+
+  void receiveRecipe() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RecipeRecieveScreen(recieveFunction),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final defaultTags = Provider.of<Tags>(context, listen: false).defaultTags;
@@ -64,6 +83,7 @@ class _RecipeScreenState extends State<RecipeScreen> {
 
     return TemplateScreen(
       title: 'RECIPE',
+      addRecipe: receiveRecipe,
       primaryColor: AppColors.orange,
       secondaryColor: AppColors.yellow,
       addNew: addNewRecipe,
